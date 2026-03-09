@@ -5,10 +5,14 @@ export const Footer: React.FC = () => {
     <footer className="py-20 px-8 md:px-24 border-t border-white/5 bg-brand-dark">
       <div className="grid md:grid-cols-4 gap-16 mb-20">
         <div className="md:col-span-2">
-          <div className="text-xl font-display tracking-widest uppercase mb-8">
-            Умный Ремонт
-          </div>
-          <p className="text-sm opacity-40 max-w-xs leading-relaxed">
+          <a href="#" className="inline-block mb-8">
+            <img
+              src="/brand/logo-white.svg"
+              alt="Умный Ремонт"
+              className="w-40 md:w-44 h-auto"
+            />
+          </a>
+          <p className="text-sm opacity-40 max-w-sm leading-relaxed">
             Архитектурная реализация интерьеров для тех, кто ценит точность, материальность и вневременной дизайн.
           </p>
         </div>
