@@ -1,6 +1,7 @@
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
+import { EstimateApp } from './components/EstimateApp';
 import { Portfolio } from './components/Portfolio';
 import { Quote } from './components/Quote';
 import { Testimonials } from './components/Testimonials';
@@ -39,6 +40,7 @@ export default function App() {
       <Navbar />
       <Hero />
       <About />
+      <EstimateApp />
       <Portfolio />
       <Quote />
       <Testimonials />
@@ -47,4 +49,3 @@ export default function App() {
     </main>
   );
 }
-
