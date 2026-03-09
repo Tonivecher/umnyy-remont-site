@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MagneticButton } from './MagneticButton';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const portfolioLeadHref = 'https://t.me/umniyremontbot?start=measure_site_works';
 
 const projects = [
   {
@@ -74,13 +77,31 @@ export const Portfolio: React.FC = () => {
 
   return (
     <section id="portfolio" className="py-24 md:py-36 px-8 md:px-24 bg-brand-dark">
-      <div className="flex justify-between items-end mb-16 md:mb-20">
+      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between mb-16 md:mb-20">
         <div>
           <span className="text-[10px] uppercase tracking-[0.3em] mb-4 block opacity-40">Избранные проекты</span>
           <h2 className="text-5xl md:text-7xl font-display">Портфолио</h2>
         </div>
-        <div className="hidden md:block text-[10px] uppercase tracking-[0.2em] opacity-40">
-          {`Просмотр 01 — ${String(projects.length).padStart(2, '0')}`}
+
+        <div className="flex flex-col items-start gap-5 md:items-end">
+          <div className="hidden md:block text-[10px] uppercase tracking-[0.2em] opacity-40">
+            {`Просмотр 01 — ${String(projects.length).padStart(2, '0')}`}
+          </div>
+
+          <MagneticButton>
+            <a
+              href={portfolioLeadHref}
+              target="_blank"
+              rel="noreferrer"
+              className="group relative inline-flex items-center justify-center overflow-hidden border border-white/15 px-8 py-4 text-[10px] uppercase tracking-[0.3em] text-white transition-colors hover:border-white/35"
+              aria-label="Оставить заявку через Telegram"
+            >
+              <span className="relative z-10 transition-colors duration-500 group-hover:text-brand-dark">
+                Оставить заявку
+              </span>
+              <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
+            </a>
+          </MagneticButton>
         </div>
       </div>
 
