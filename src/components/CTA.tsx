@@ -2,6 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { MagneticButton } from './MagneticButton';
 
+// Replace these placeholders with the live WhatsApp/Telegram contacts.
+const contactLinks = {
+  phoneHref: 'tel:+79991234567',
+  phoneLabel: '+7 (999) 123-45-67',
+  whatsappHref: 'https://wa.me/79990000000',
+  telegramHref: 'https://t.me/your_telegram',
+};
+
 export const CTA: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -32,19 +40,39 @@ export const CTA: React.FC = () => {
           Давайте реализуем ваше видение вместе.
         </h2>
         
-        <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
-          <MagneticButton>
-            <button className="group relative py-6 px-12 bg-brand-dark text-white overflow-hidden">
-              <span className="relative z-10 text-[10px] uppercase tracking-[0.3em]">Обсудить проект</span>
-              <div className="absolute inset-0 bg-brand-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo"></div>
-            </button>
-          </MagneticButton>
-          
+        <div className="flex flex-col gap-6 justify-center items-center">
+          <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
+            <MagneticButton>
+              <a
+                href={contactLinks.whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative inline-flex items-center justify-center py-6 px-12 bg-brand-dark text-white overflow-hidden"
+                aria-label="Написать в WhatsApp"
+              >
+                <span className="relative z-10 text-[10px] uppercase tracking-[0.3em]">WhatsApp</span>
+                <div className="absolute inset-0 bg-brand-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo"></div>
+              </a>
+            </MagneticButton>
+
+            <MagneticButton>
+              <a
+                href={contactLinks.telegramHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center py-6 px-12 border border-brand-dark/15 text-[10px] uppercase tracking-[0.3em] hover:border-brand-dark transition-colors"
+                aria-label="Написать в Telegram"
+              >
+                Telegram
+              </a>
+            </MagneticButton>
+          </div>
+
           <a 
-            href="tel:+79991234567" 
+            href={contactLinks.phoneHref}
             className="text-[10px] uppercase tracking-[0.3em] border-b border-brand-dark/20 pb-2 hover:border-brand-dark transition-colors"
           >
-            +7 (999) 123-45-67
+            {contactLinks.phoneLabel}
           </a>
         </div>
       </div>
