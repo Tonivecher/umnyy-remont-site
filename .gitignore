@@ -5,6 +5,7 @@ coverage/
 .DS_Store
 *.log
 .netlify/
+deno.lock
 site-preview*.png
 .env*
 !.env.example
