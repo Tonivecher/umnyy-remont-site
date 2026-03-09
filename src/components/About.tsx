@@ -1,0 +1,93 @@
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MagneticButton } from './MagneticButton';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export const About: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(textRef.current, {
+        x: -50,
+        opacity: 0,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+        }
+      });
+
+      gsap.from(imageRef.current, {
+        scale: 1.1,
+        opacity: 0,
+        duration: 2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+        }
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section 
+      ref={sectionRef}
+      id="about"
+      className="py-32 md:py-64 px-8 md:px-24 grid md:grid-cols-2 gap-16 md:gap-32 items-center bg-brand-light text-brand-dark"
+    >
+      <div ref={textRef} className="max-w-xl">
+        <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Философия</span>
+        <h2 className="text-4xl md:text-6xl mb-10 leading-[1.1]">
+          Мы не просто строим стены. Мы реализуем архитектурные видения.
+        </h2>
+        <div className="space-y-6 text-lg leading-relaxed opacity-80 font-light">
+          <p>
+            Наш подход основан на точности скандинавского дизайна и душе средиземноморского тепла. 
+            Каждый проект — это диалог между пространством, светом и материальностью.
+          </p>
+          <div className="pt-8 border-t border-brand-dark/10">
+            <p className="text-base font-medium mb-4">Команда «Умный Ремонт» выполняет ремонт квартир под ключ в Москве.</p>
+            <p className="text-sm">
+              Мы специализируемся на профессиональной отделке интерьеров, точной геометрии и аккуратной работе с материалами.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              <li className="flex items-center gap-2">• ремонт квартир под ключ</li>
+              <li className="flex items-center gap-2">• отделку интерьеров</li>
+              <li className="flex items-center gap-2">• комплексный ремонт квартир</li>
+            </ul>
+            <p className="mt-4 text-sm font-medium">Работаем по Москве и Московской области.</p>
+          </div>
+        </div>
+        <div className="mt-12">
+          <MagneticButton>
+            <button className="group relative py-4 px-8 border border-brand-dark/20 overflow-hidden transition-colors hover:text-white">
+              <span className="relative z-10 text-[10px] uppercase tracking-[0.2em]">Узнать о процессе</span>
+              <div className="absolute inset-0 bg-brand-dark translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo"></div>
+            </button>
+          </MagneticButton>
+        </div>
+      </div>
+      
+      <div ref={imageRef} className="aspect-[4/5] overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop" 
+          alt="Minimalist Architecture"
+          className="w-full h-full object-cover"
+          referrerPolicy="no-referrer"
+          loading="lazy"
+        />
+      </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .ease-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+      `}} />
+    </section>
+  );
+};
