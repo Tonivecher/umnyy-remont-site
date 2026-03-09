@@ -23,15 +23,12 @@ export const Navbar: React.FC = () => {
       className="nav-readable fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-10 mix-blend-difference text-white"
       aria-label="Main Navigation"
     >
-      <a href="#" className="flex items-center gap-3">
+      <a href="#" className="block shrink-0">
         <img
-          src="/brand/symbol-white.svg"
+          src="/brand/symbol-white@3x.png"
           alt="Умный Ремонт"
-          className="h-9 md:h-10 w-auto shrink-0"
+          className="h-10 md:h-12 w-auto"
         />
-        <span className="text-xl font-display tracking-widest uppercase">
-          Умный Ремонт
-        </span>
       </a>
       
       <div className="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-medium">

@@ -7,7 +7,7 @@ export const Footer: React.FC = () => {
         <div className="md:col-span-2">
           <a href="#" className="inline-block mb-8">
             <img
-              src="/brand/logo-white.svg"
+              src="/brand/logo-white@3x.png"
               alt="Умный Ремонт"
               className="w-40 md:w-44 h-auto"
             />
