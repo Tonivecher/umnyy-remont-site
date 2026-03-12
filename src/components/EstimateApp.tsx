@@ -62,7 +62,7 @@ export const EstimateApp: React.FC = () => {
             SmartRepair Mini App
           </span>
 
-          <h2 className="text-5xl md:text-7xl font-display leading-[0.98] max-w-4xl">
+          <h2 data-split-heading className="text-5xl md:text-7xl font-display leading-[0.98] max-w-4xl">
             Предварительную стоимость материалов можно рассчитать еще до замера.
           </h2>
 

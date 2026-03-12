@@ -44,7 +44,7 @@ export const About: React.FC = () => {
     >
       <div ref={textRef} className="max-w-xl">
         <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Философия</span>
-        <h2 className="text-4xl md:text-6xl mb-10 leading-[1.1]">
+        <h2 data-split-heading className="text-4xl md:text-6xl mb-10 leading-[1.1]">
           Мы не просто строим стены. Мы реализуем архитектурные видения.
         </h2>
         <div className="space-y-6 text-lg leading-relaxed opacity-80 font-light">

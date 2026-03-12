@@ -11,8 +11,9 @@ export const Hero: React.FC = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Entrance animation
-      gsap.from(contentRef.current?.children || [], {
+      const fadingElements = contentRef.current?.querySelectorAll('[data-hero-fade]') ?? [];
+
+      gsap.from(fadingElements, {
         y: 100,
         opacity: 0,
         duration: 2,
@@ -74,10 +75,13 @@ export const Hero: React.FC = () => {
         ref={contentRef}
         className="relative z-10 text-center px-4"
       >
-        <h1 className="text-7xl md:text-[12vw] font-display leading-none mb-6 tracking-tighter">
+        <h1
+          data-split-heading
+          className="text-7xl md:text-[12vw] font-display leading-none mb-6 tracking-tighter"
+        >
           Умный Ремонт
         </h1>
-        <p className="text-xs md:text-sm uppercase tracking-[0.5em] font-light opacity-80">
+        <p data-hero-fade className="text-xs md:text-sm uppercase tracking-[0.5em] font-light opacity-80">
           Премиальная реализация интерьеров
         </p>
       </div>

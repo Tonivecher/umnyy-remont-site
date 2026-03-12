@@ -36,7 +36,7 @@ export const CTA: React.FC = () => {
     >
       <div className="cta-content text-center max-w-4xl mx-auto">
         <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Начните свой путь</span>
-        <h2 className="text-5xl md:text-8xl font-display mb-16 leading-none">
+        <h2 data-split-heading className="text-5xl md:text-8xl font-display mb-16 leading-none">
           Давайте реализуем ваше видение вместе.
         </h2>
         

@@ -43,7 +43,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({ children, classN
   }, []);
 
   return (
-    <div ref={buttonRef} className={cn("inline-block", className)}>
+    <div ref={buttonRef} data-cursor-magnetic className={cn("inline-block", className)}>
       {children}
     </div>
   );

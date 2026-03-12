@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MagneticButton } from './MagneticButton';
+import { SpotlightCard } from './SpotlightCard';
+import { DistortionImage } from './DistortionImage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,7 +59,7 @@ export const Portfolio: React.FC = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const items = gsap.utils.toArray('.portfolio-item') as HTMLElement[];
+      const items = gsap.utils.toArray<HTMLElement>('.portfolio-item');
       
       items.forEach((item) => {
         gsap.from(item, {
@@ -71,7 +73,7 @@ export const Portfolio: React.FC = () => {
           }
         });
       });
-    });
+    }, containerRef);
     return () => ctx.revert();
   }, []);
 
@@ -80,7 +82,7 @@ export const Portfolio: React.FC = () => {
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between mb-16 md:mb-20">
         <div>
           <span className="text-[10px] uppercase tracking-[0.3em] mb-4 block opacity-40">Избранные проекты</span>
-          <h2 className="text-5xl md:text-7xl font-display">Портфолио</h2>
+          <h2 data-split-heading className="text-5xl md:text-7xl font-display">Портфолио</h2>
         </div>
 
         <div className="flex flex-col items-start gap-5 md:items-end">
@@ -110,40 +112,46 @@ export const Portfolio: React.FC = () => {
         className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-12"
       >
         {projects.map((project, index) => (
-          <div 
+          <SpotlightCard
             key={index} 
-            className="portfolio-item group cursor-pointer"
+            className="portfolio-item group cursor-pointer p-4 md:p-5"
+            data-cursor-portfolio
           >
-            <div className="relative aspect-[4/5] overflow-hidden mb-5">
-              <img 
-                src={project.image} 
+            <div className="relative h-full">
+              <DistortionImage
+                src={project.image}
                 alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              {/* Hover details */}
-              <div className="absolute bottom-6 left-6 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                <div className="flex gap-8 text-[10px] uppercase tracking-[0.2em]">
-                  <span>{project.location}</span>
-                  <span>{project.area}</span>
+                className="mb-6 aspect-[4/5] rounded-[1.35rem] border border-white/8 bg-black/30"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.08),rgba(10,10,10,0.02)_42%,rgba(10,10,10,0.7))]" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 p-6">
+                  <div className="translate-y-6 opacity-0 transition-all duration-500 delay-100 group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="flex flex-wrap gap-4 text-[10px] uppercase tracking-[0.24em] text-white/58">
+                      <span>{project.location}</span>
+                      <span>{project.area}</span>
+                    </div>
+                  </div>
+                </div>
+              </DistortionImage>
+
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-2xl md:text-[2rem] font-display leading-tight transition-all duration-500 group-hover:italic">
+                    {project.title}
+                  </h3>
+                  <p className="mt-3 max-w-[18rem] text-sm leading-relaxed text-white/45">
+                    Продуманная геометрия, материал и свет собраны в цельную интерьерную композицию.
+                  </p>
+                </div>
+
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.03] text-white/70 transition-colors duration-500 group-hover:bg-white group-hover:text-brand-dark">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </div>
             </div>
-            
-            <div className="flex justify-between items-center gap-4">
-              <h3 className="text-2xl md:text-3xl font-display leading-tight group-hover:italic transition-all duration-500">
-                {project.title}
-              </h3>
-              <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-brand-dark transition-colors duration-500">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
     </section>
