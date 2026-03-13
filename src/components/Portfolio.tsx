@@ -476,9 +476,7 @@ export const Portfolio: React.FC = () => {
 
       {activeProject ? (
         <div
-          data-portfolio-modal-scroll
-          className="fixed inset-0 z-[110] overflow-y-auto overscroll-contain"
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          className="fixed inset-0 z-[110] overflow-hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby="portfolio-dialog-title"
@@ -486,20 +484,21 @@ export const Portfolio: React.FC = () => {
         >
           <div className="absolute inset-0 bg-black/78 backdrop-blur-md" />
 
-          <div className="relative flex min-h-full items-start justify-center px-4 py-6 md:px-8 md:py-10">
+          <div className="relative flex h-full items-start justify-center px-4 py-5 md:items-center md:px-8 md:py-8">
             <div
-              className="relative flex w-full max-w-6xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
+              className="relative flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-[1.65rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="flex flex-col gap-6 border-b border-white/10 px-6 py-6 md:flex-row md:items-start md:justify-between md:px-8 md:py-8">
+              <div className="shrink-0 border-b border-white/10 bg-[#070707]/95 px-5 py-5 md:px-6 md:py-6">
+                <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                 <div className="max-w-3xl">
                   <span className="text-[10px] uppercase tracking-[0.28em] text-white/40">
                     {`${activeProject.category} · ${activeProject.stage} · ${activeProject.gallery.length} кадров`}
                   </span>
-                  <h3 id="portfolio-dialog-title" className="mt-4 text-3xl font-display md:text-5xl">
+                  <h3 id="portfolio-dialog-title" className="mt-4 text-[2.35rem] leading-none font-display md:text-[4.2rem]">
                     {activeProject.title}
                   </h3>
-                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/58 md:text-base">
+                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/58 md:text-[15px]">
                     {activeProject.description}
                   </p>
                   <div className="mt-5 flex flex-wrap gap-2">
@@ -531,8 +530,13 @@ export const Portfolio: React.FC = () => {
                   </svg>
                 </button>
               </div>
+              </div>
 
-              <div className="px-6 pb-6 pt-5 md:px-8 md:pb-8">
+              <div
+                data-portfolio-modal-scroll
+                className="min-h-0 overflow-y-auto overscroll-contain px-5 pb-5 pt-4 md:px-6 md:pb-6 md:pt-5"
+                style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+              >
                 <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <span className="text-[10px] uppercase tracking-[0.28em] text-white/36">
                     Полная подборка по объекту
@@ -557,7 +561,7 @@ export const Portfolio: React.FC = () => {
                   </a>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 md:gap-4">
                   {activeProject.gallery.map((image, index) => (
                     <figure
                       key={image.src}
@@ -566,7 +570,7 @@ export const Portfolio: React.FC = () => {
                       }`}
                     >
                       <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
-                      <figcaption className="border-t border-white/8 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-white/40">
+                      <figcaption className="border-t border-white/8 px-4 py-2.5 text-[11px] uppercase tracking-[0.22em] text-white/40">
                         {image.caption}
                       </figcaption>
                     </figure>
