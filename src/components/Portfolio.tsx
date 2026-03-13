@@ -279,9 +279,13 @@ const projects: Project[] = [
 
 export const Portfolio: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [modalScrollProgress, setModalScrollProgress] = useState(0);
+  const [modalHasOverflow, setModalHasOverflow] = useState(false);
 
   const activeProject = projects.find((project) => project.id === activeProjectId) ?? null;
+  const indicatorProgress = Math.min(Math.max(modalScrollProgress, 0.08), 0.92);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -348,6 +352,63 @@ export const Portfolio: React.FC = () => {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeProject]);
+
+  useEffect(() => {
+    const element = modalScrollRef.current;
+    if (!activeProject || !element) {
+      setModalScrollProgress(0);
+      setModalHasOverflow(false);
+      return;
+    }
+
+    const updateScrollMeta = () => {
+      const maxScroll = Math.max(element.scrollHeight - element.clientHeight, 0);
+      const hasOverflow = maxScroll > 24;
+      const nextProgress = hasOverflow ? element.scrollTop / maxScroll : 0;
+
+      setModalHasOverflow(hasOverflow);
+      setModalScrollProgress(Math.min(Math.max(nextProgress, 0), 1));
+    };
+
+    const handleScroll = () => {
+      updateScrollMeta();
+    };
+
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => updateScrollMeta()) : null;
+    const content = element.firstElementChild;
+
+    resizeObserver?.observe(element);
+    if (content) {
+      resizeObserver?.observe(content);
+    }
+
+    const images = Array.from(element.querySelectorAll('img'));
+    const handleImageLoad = () => updateScrollMeta();
+
+    images.forEach((image) => {
+      if (!image.complete) {
+        image.addEventListener('load', handleImageLoad);
+      }
+    });
+
+    window.addEventListener('resize', updateScrollMeta);
+    element.addEventListener('scroll', handleScroll, { passive: true });
+
+    const initialFrame = window.requestAnimationFrame(updateScrollMeta);
+    const delayedFrame = window.setTimeout(updateScrollMeta, 180);
+
+    return () => {
+      window.cancelAnimationFrame(initialFrame);
+      window.clearTimeout(delayedFrame);
+      window.removeEventListener('resize', updateScrollMeta);
+      element.removeEventListener('scroll', handleScroll);
+      resizeObserver?.disconnect();
+      images.forEach((image) => {
+        image.removeEventListener('load', handleImageLoad);
+      });
     };
   }, [activeProject]);
 
@@ -489,6 +550,30 @@ export const Portfolio: React.FC = () => {
               className="relative flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-[1.65rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
               onClick={(event) => event.stopPropagation()}
             >
+              {modalHasOverflow ? (
+                <div className="pointer-events-none absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 md:flex flex-col items-center gap-3 rounded-full border border-white/10 bg-black/36 px-3 py-4 backdrop-blur-md">
+                  <span className="scroll-hint-label text-[8px] uppercase tracking-[0.38em] text-white/52 [writing-mode:vertical-rl] rotate-180">
+                    Листайте
+                  </span>
+
+                  <div className="relative h-28 w-px overflow-hidden rounded-full bg-white/12">
+                    <div
+                      className="absolute inset-x-0 top-0 bg-gradient-to-b from-white via-white/70 to-white/20"
+                      style={{
+                        height: `${Math.max(modalScrollProgress * 100, 14)}%`,
+                      }}
+                    />
+                    <div
+                      className="scroll-hint-dot absolute left-1/2 h-3 w-3 rounded-full border border-white/30 bg-white shadow-[0_0_18px_rgba(255,255,255,0.4)]"
+                      style={{
+                        top: `calc(${indicatorProgress * 100}% - 0.375rem)`,
+                        transform: 'translateX(-50%)',
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : null}
+
               <div className="shrink-0 border-b border-white/10 bg-[#070707]/95 px-5 py-5 md:px-6 md:py-6">
                 <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                 <div className="max-w-3xl">
@@ -534,7 +619,8 @@ export const Portfolio: React.FC = () => {
 
               <div
                 data-portfolio-modal-scroll
-                className="min-h-0 overflow-y-auto overscroll-contain px-5 pb-5 pt-4 md:px-6 md:pb-6 md:pt-5"
+                ref={modalScrollRef}
+                className="scrollbar-hidden min-h-0 overflow-y-auto overscroll-contain px-5 pb-5 pt-4 md:px-6 md:pb-6 md:pt-5"
                 style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
               >
                 <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
