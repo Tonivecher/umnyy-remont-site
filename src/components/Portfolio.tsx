@@ -448,7 +448,7 @@ export const Portfolio: React.FC = () => {
 
       {activeProject ? (
         <div
-          className="fixed inset-0 z-[110] overflow-y-auto px-4 py-6 md:px-8 md:py-10"
+          className="fixed inset-0 z-[110] overflow-hidden px-4 py-6 md:px-8 md:py-10"
           role="dialog"
           aria-modal="true"
           aria-labelledby="portfolio-dialog-title"
@@ -456,90 +456,95 @@ export const Portfolio: React.FC = () => {
         >
           <div className="absolute inset-0 bg-black/78 backdrop-blur-md" />
 
-          <div
-            className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex flex-col gap-6 border-b border-white/10 px-6 py-6 md:flex-row md:items-start md:justify-between md:px-8 md:py-8">
-              <div className="max-w-3xl">
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white/40">
-                  {`${activeProject.category} · ${activeProject.stage} · ${activeProject.gallery.length} кадров`}
-                </span>
-                <h3 id="portfolio-dialog-title" className="mt-4 text-3xl font-display md:text-5xl">
-                  {activeProject.title}
-                </h3>
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/58 md:text-base">
-                  {activeProject.description}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {activeProject.highlights.map((highlight) => (
-                    <span
-                      key={highlight}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/58"
-                    >
-                      {highlight}
-                    </span>
-                  ))}
+          <div className="relative flex h-full items-start justify-center">
+            <div
+              className="relative flex max-h-full w-full max-w-6xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex flex-col gap-6 border-b border-white/10 px-6 py-6 md:flex-row md:items-start md:justify-between md:px-8 md:py-8">
+                <div className="max-w-3xl">
+                  <span className="text-[10px] uppercase tracking-[0.28em] text-white/40">
+                    {`${activeProject.category} · ${activeProject.stage} · ${activeProject.gallery.length} кадров`}
+                  </span>
+                  <h3 id="portfolio-dialog-title" className="mt-4 text-3xl font-display md:text-5xl">
+                    {activeProject.title}
+                  </h3>
+                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/58 md:text-base">
+                    {activeProject.description}
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {activeProject.highlights.map((highlight) => (
+                      <span
+                        key={highlight}
+                        className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/58"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveProjectId(null)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white/72 transition-colors hover:border-white/30 hover:text-white"
-                aria-label="Закрыть галерею"
-              >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M1 1L11 11M11 1L1 11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="px-6 pb-6 pt-5 md:px-8 md:pb-8">
-              <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white/36">
-                  Полная подборка по объекту
-                </span>
-
-                <a
-                  href={portfolioLeadHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-white"
+                <button
+                  type="button"
+                  onClick={() => setActiveProjectId(null)}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white/72 transition-colors hover:border-white/30 hover:text-white"
+                  aria-label="Закрыть галерею"
                 >
-                  <span>Обсудить похожий проект</span>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
-                      d="M1 11L11 1M11 1H1M11 1V11"
+                      d="M1 1L11 11M11 1L1 11"
                       stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                   </svg>
-                </a>
+                </button>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {activeProject.gallery.map((image, index) => (
-                  <figure
-                    key={image.src}
-                    className={`overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] ${
-                      index === 0 ? 'sm:col-span-2' : ''
-                    }`}
+              <div
+                className="min-h-0 overflow-y-auto px-6 pb-6 pt-5 md:px-8 md:pb-8"
+                style={{ WebkitOverflowScrolling: 'touch' }}
+              >
+                <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <span className="text-[10px] uppercase tracking-[0.28em] text-white/36">
+                    Полная подборка по объекту
+                  </span>
+
+                  <a
+                    href={portfolioLeadHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-white"
                   >
-                    <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
-                    <figcaption className="border-t border-white/8 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-white/40">
-                      {image.caption}
-                    </figcaption>
-                  </figure>
-                ))}
+                    <span>Обсудить похожий проект</span>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M1 11L11 1M11 1H1M11 1V11"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </a>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {activeProject.gallery.map((image, index) => (
+                    <figure
+                      key={image.src}
+                      className={`overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] ${
+                        index === 0 ? 'sm:col-span-2' : ''
+                      }`}
+                    >
+                      <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
+                      <figcaption className="border-t border-white/8 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-white/40">
+                        {image.caption}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
