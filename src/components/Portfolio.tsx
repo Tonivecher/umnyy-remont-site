@@ -7,6 +7,8 @@ import { DistortionImage } from './DistortionImage';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const portfolioModalEvent = 'portfolio-modal-toggle';
+
 type ProjectImage = {
   src: string;
   alt: string;
@@ -303,6 +305,32 @@ export const Portfolio: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const isOpen = Boolean(activeProject);
+
+    window.dispatchEvent(
+      new CustomEvent<{ open: boolean }>(portfolioModalEvent, {
+        detail: { open: isOpen },
+      }),
+    );
+
+    if (!activeProject) {
+      return;
+    }
+
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      window.dispatchEvent(
+        new CustomEvent<{ open: boolean }>(portfolioModalEvent, {
+          detail: { open: false },
+        }),
+      );
+    };
+  }, [activeProject]);
+
+  useEffect(() => {
     if (!activeProject) {
       return;
     }
@@ -458,6 +486,7 @@ export const Portfolio: React.FC = () => {
 
           <div className="relative flex h-full items-start justify-center">
             <div
+              data-portfolio-modal-scroll
               className="relative flex max-h-full w-full max-w-6xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
               onClick={(event) => event.stopPropagation()}
             >
@@ -503,7 +532,8 @@ export const Portfolio: React.FC = () => {
               </div>
 
               <div
-                className="min-h-0 overflow-y-auto px-6 pb-6 pt-5 md:px-8 md:pb-8"
+                data-portfolio-modal-scroll
+                className="min-h-0 overflow-y-auto overscroll-contain px-6 pb-6 pt-5 md:px-8 md:pb-8"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
                 <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

@@ -17,6 +17,8 @@ import SplitType from 'split-type';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const portfolioModalEvent = 'portfolio-modal-toggle';
+
 export default function App() {
   const mainRef = useRef<HTMLElement>(null);
 
@@ -38,6 +40,20 @@ export default function App() {
     lenis.on('scroll', handleLenisScroll);
     gsap.ticker.add(handleGsapTick);
     gsap.ticker.lagSmoothing(0);
+
+    const handlePortfolioModalToggle = (event: Event) => {
+      const customEvent = event as CustomEvent<{ open?: boolean }>;
+      const isOpen = Boolean(customEvent.detail?.open);
+
+      if (isOpen) {
+        lenis.stop();
+      } else {
+        lenis.start();
+        ScrollTrigger.update();
+      }
+    };
+
+    window.addEventListener(portfolioModalEvent, handlePortfolioModalToggle as EventListener);
 
     const splitHeadings: SplitType[] = [];
 
@@ -99,6 +115,7 @@ export default function App() {
       ctx.revert();
       gsap.ticker.remove(handleGsapTick);
       lenis.off('scroll', handleLenisScroll);
+      window.removeEventListener(portfolioModalEvent, handlePortfolioModalToggle as EventListener);
       lenis.destroy();
     };
   }, []);
