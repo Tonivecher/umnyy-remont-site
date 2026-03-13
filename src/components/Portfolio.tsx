@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MagneticButton } from './MagneticButton';
@@ -372,6 +373,8 @@ export const Portfolio: React.FC = () => {
       setModalScrollProgress(Math.min(Math.max(nextProgress, 0), 1));
     };
 
+    element.scrollTop = 0;
+
     const handleScroll = () => {
       updateScrollMeta();
     };
@@ -412,261 +415,265 @@ export const Portfolio: React.FC = () => {
     };
   }, [activeProject]);
 
-  return (
-    <section id="portfolio" className="bg-brand-dark px-8 py-24 md:px-24 md:py-36">
-      <div className="mb-16 flex flex-col gap-8 md:mb-20 md:flex-row md:items-end md:justify-between">
-        <div>
-          <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] opacity-40">
-            Объекты и пространства
-          </span>
-          <h2 data-split-heading className="text-5xl font-display md:text-7xl">
-            Портфолио
-          </h2>
-        </div>
+  const modalMarkup = activeProject ? (
+    <div
+      className="fixed inset-0 z-[140] overflow-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="portfolio-dialog-title"
+      onClick={() => setActiveProjectId(null)}
+    >
+      <div className="absolute inset-0 bg-black/78 backdrop-blur-md" />
 
-        <div className="flex flex-col items-start gap-5 md:items-end">
-          <div className="hidden text-[10px] uppercase tracking-[0.2em] opacity-40 md:block">
-            {`Просмотр 01 — ${String(projects.length).padStart(2, '0')}`}
-          </div>
-
-          <MagneticButton>
-            <a
-              href={portfolioLeadHref}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative inline-flex items-center justify-center overflow-hidden border border-white/15 px-8 py-4 text-[10px] uppercase tracking-[0.3em] text-white transition-colors hover:border-white/35"
-              aria-label="Оставить заявку через Telegram"
-            >
-              <span className="relative z-10 transition-colors duration-500 group-hover:text-brand-dark">
-                Оставить заявку
-              </span>
-              <div className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
-            </a>
-          </MagneticButton>
-        </div>
-      </div>
-
-      <div ref={containerRef} className="grid grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-3 md:gap-12">
-        {projects.map((project) => {
-          const previewImages = project.gallery.slice(1, 4);
-          const hiddenImagesCount = Math.max(project.gallery.length - 4, 0);
-
-          return (
-            <SpotlightCard key={project.id} className="portfolio-item p-4 md:p-5">
-              <button
-                type="button"
-                onClick={() => setActiveProjectId(project.id)}
-                className="group block h-full w-full text-left"
-                aria-label={`Открыть объект ${project.title}`}
-                data-cursor-portfolio
-              >
-                <div className="relative h-full">
-                  <DistortionImage
-                    src={project.gallery[0].src}
-                    alt={project.gallery[0].alt}
-                    className="mb-6 aspect-[4/5] rounded-[1.35rem] border border-white/8 bg-black/30"
-                  >
-                    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.08),rgba(10,10,10,0.02)_42%,rgba(10,10,10,0.78))]" />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 p-6">
-                      <div className="translate-y-6 opacity-0 transition-all duration-500 delay-100 group-hover:translate-y-0 group-hover:opacity-100">
-                        <div className="flex flex-wrap gap-4 text-[10px] uppercase tracking-[0.24em] text-white/58">
-                          <span>{project.category}</span>
-                          <span>{project.stage}</span>
-                          <span>{`${project.gallery.length} кадров`}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </DistortionImage>
-
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="mb-4 flex flex-wrap gap-2">
-                        {project.highlights.map((highlight) => (
-                          <span
-                            key={highlight}
-                            className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/58"
-                          >
-                            {highlight}
-                          </span>
-                        ))}
-                      </div>
-
-                      <h3 className="text-2xl font-display leading-tight transition-all duration-500 group-hover:italic md:text-[2rem]">
-                        {project.title}
-                      </h3>
-                      <p className="mt-3 max-w-[20rem] text-sm leading-relaxed text-white/45">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.03] text-white/70 transition-colors duration-500 group-hover:bg-white group-hover:text-brand-dark">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M1 11L11 1M11 1H1M11 1V11"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-3 gap-3">
-                    {previewImages.map((image) => (
-                      <div
-                        key={image.src}
-                        className="overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03]"
-                      >
-                        <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
-                      </div>
-                    ))}
-
-                    {hiddenImagesCount > 0 ? (
-                      <div className="flex aspect-[4/5] items-center justify-center rounded-2xl border border-white/8 bg-white/[0.03] text-[12px] uppercase tracking-[0.24em] text-white/58">
-                        {`+${hiddenImagesCount}`}
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </button>
-            </SpotlightCard>
-          );
-        })}
-      </div>
-
-      {activeProject ? (
+      <div className="relative flex h-full items-start justify-center p-4 md:items-center md:p-8">
         <div
-          className="fixed inset-0 z-[110] overflow-hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="portfolio-dialog-title"
-          onClick={() => setActiveProjectId(null)}
+          className="relative flex h-[calc(100dvh-2rem)] w-full max-w-[68rem] flex-col overflow-hidden rounded-[1.65rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)] md:h-[min(88dvh,56rem)]"
+          onClick={(event) => event.stopPropagation()}
         >
-          <div className="absolute inset-0 bg-black/78 backdrop-blur-md" />
+          {modalHasOverflow ? (
+            <div className="pointer-events-none absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 md:flex flex-col items-center gap-3 rounded-full border border-white/10 bg-black/36 px-3 py-4 backdrop-blur-md">
+              <span className="scroll-hint-label text-[8px] uppercase tracking-[0.38em] text-white/52 [writing-mode:vertical-rl] rotate-180">
+                Листайте
+              </span>
 
-          <div className="relative flex h-full items-start justify-center px-4 py-5 md:items-center md:px-8 md:py-8">
-            <div
-              className="relative flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-[1.65rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
-              onClick={(event) => event.stopPropagation()}
-            >
-              {modalHasOverflow ? (
-                <div className="pointer-events-none absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 md:flex flex-col items-center gap-3 rounded-full border border-white/10 bg-black/36 px-3 py-4 backdrop-blur-md">
-                  <span className="scroll-hint-label text-[8px] uppercase tracking-[0.38em] text-white/52 [writing-mode:vertical-rl] rotate-180">
-                    Листайте
-                  </span>
-
-                  <div className="relative h-28 w-px overflow-hidden rounded-full bg-white/12">
-                    <div
-                      className="absolute inset-x-0 top-0 bg-gradient-to-b from-white via-white/70 to-white/20"
-                      style={{
-                        height: `${Math.max(modalScrollProgress * 100, 14)}%`,
-                      }}
-                    />
-                    <div
-                      className="scroll-hint-dot absolute left-1/2 h-3 w-3 rounded-full border border-white/30 bg-white shadow-[0_0_18px_rgba(255,255,255,0.4)]"
-                      style={{
-                        top: `calc(${indicatorProgress * 100}% - 0.375rem)`,
-                        transform: 'translateX(-50%)',
-                      }}
-                    />
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="shrink-0 border-b border-white/10 bg-[#070707]/95 px-5 py-5 md:px-6 md:py-6">
-                <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-                <div className="max-w-3xl">
-                  <span className="text-[10px] uppercase tracking-[0.28em] text-white/40">
-                    {`${activeProject.category} · ${activeProject.stage} · ${activeProject.gallery.length} кадров`}
-                  </span>
-                  <h3 id="portfolio-dialog-title" className="mt-4 text-[2.35rem] leading-none font-display md:text-[4.2rem]">
-                    {activeProject.title}
-                  </h3>
-                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/58 md:text-[15px]">
-                    {activeProject.description}
-                  </p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {activeProject.highlights.map((highlight) => (
-                      <span
-                        key={highlight}
-                        className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/58"
-                      >
-                        {highlight}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveProjectId(null)}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white/72 transition-colors hover:border-white/30 hover:text-white"
-                  aria-label="Закрыть галерею"
-                >
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M1 1L11 11M11 1L1 11"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+              <div className="relative h-28 w-px overflow-hidden rounded-full bg-white/12">
+                <div
+                  className="absolute inset-x-0 top-0 bg-gradient-to-b from-white via-white/70 to-white/20"
+                  style={{
+                    height: `${Math.max(modalScrollProgress * 100, 14)}%`,
+                  }}
+                />
+                <div
+                  className="scroll-hint-dot absolute left-1/2 h-3 w-3 rounded-full border border-white/30 bg-white shadow-[0_0_18px_rgba(255,255,255,0.4)]"
+                  style={{
+                    top: `calc(${indicatorProgress * 100}% - 0.375rem)`,
+                    transform: 'translateX(-50%)',
+                  }}
+                />
               </div>
-              </div>
+            </div>
+          ) : null}
 
-              <div
-                data-portfolio-modal-scroll
-                ref={modalScrollRef}
-                className="scrollbar-hidden min-h-0 overflow-y-auto overscroll-contain px-5 pb-5 pt-4 md:px-6 md:pb-6 md:pt-5"
-                style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
-              >
-                <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <span className="text-[10px] uppercase tracking-[0.28em] text-white/36">
-                    Полная подборка по объекту
-                  </span>
-
-                  <a
-                    href={portfolioLeadHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-white"
-                  >
-                    <span>Обсудить похожий проект</span>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M1 11L11 1M11 1H1M11 1V11"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 md:gap-4">
-                  {activeProject.gallery.map((image, index) => (
-                    <figure
-                      key={image.src}
-                      className={`overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] ${
-                        index === 0 ? 'sm:col-span-2' : ''
-                      }`}
+          <div className="shrink-0 border-b border-white/10 bg-[#070707]/95 px-5 py-5 md:px-6 md:py-6">
+            <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+              <div className="max-w-3xl">
+                <span className="text-[10px] uppercase tracking-[0.28em] text-white/40">
+                  {`${activeProject.category} · ${activeProject.stage} · ${activeProject.gallery.length} кадров`}
+                </span>
+                <h3 id="portfolio-dialog-title" className="mt-4 text-[2.35rem] leading-none font-display md:text-[4.2rem]">
+                  {activeProject.title}
+                </h3>
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/58 md:text-[15px]">
+                  {activeProject.description}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {activeProject.highlights.map((highlight) => (
+                    <span
+                      key={highlight}
+                      className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/58"
                     >
-                      <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
-                      <figcaption className="border-t border-white/8 px-4 py-2.5 text-[11px] uppercase tracking-[0.22em] text-white/40">
-                        {image.caption}
-                      </figcaption>
-                    </figure>
+                      {highlight}
+                    </span>
                   ))}
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveProjectId(null)}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white/72 transition-colors hover:border-white/30 hover:text-white"
+                aria-label="Закрыть галерею"
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1 1L11 11M11 1L1 11"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div
+            data-portfolio-modal-scroll
+            ref={modalScrollRef}
+            className="scrollbar-hidden flex-1 overflow-y-auto overscroll-contain px-5 pb-5 pt-4 md:px-6 md:pb-6 md:pt-5"
+            style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+          >
+            <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <span className="text-[10px] uppercase tracking-[0.28em] text-white/36">
+                Полная подборка по объекту
+              </span>
+
+              <a
+                href={portfolioLeadHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-white/60 transition-colors hover:text-white"
+              >
+                <span>Обсудить похожий проект</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1 11L11 1M11 1H1M11 1V11"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 md:gap-4">
+              {activeProject.gallery.map((image, index) => (
+                <figure
+                  key={image.src}
+                  className={`overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] ${
+                    index === 0 ? 'sm:col-span-2' : ''
+                  }`}
+                >
+                  <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
+                  <figcaption className="border-t border-white/8 px-4 py-2.5 text-[11px] uppercase tracking-[0.22em] text-white/40">
+                    {image.caption}
+                  </figcaption>
+                </figure>
+              ))}
             </div>
           </div>
         </div>
-      ) : null}
-    </section>
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <>
+      <section id="portfolio" className="bg-brand-dark px-8 py-24 md:px-24 md:py-36">
+        <div className="mb-16 flex flex-col gap-8 md:mb-20 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] opacity-40">
+              Объекты и пространства
+            </span>
+            <h2 data-split-heading className="text-5xl font-display md:text-7xl">
+              Портфолио
+            </h2>
+          </div>
+
+          <div className="flex flex-col items-start gap-5 md:items-end">
+            <div className="hidden text-[10px] uppercase tracking-[0.2em] opacity-40 md:block">
+              {`Просмотр 01 — ${String(projects.length).padStart(2, '0')}`}
+            </div>
+
+            <MagneticButton>
+              <a
+                href={portfolioLeadHref}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative inline-flex items-center justify-center overflow-hidden border border-white/15 px-8 py-4 text-[10px] uppercase tracking-[0.3em] text-white transition-colors hover:border-white/35"
+                aria-label="Оставить заявку через Telegram"
+              >
+                <span className="relative z-10 transition-colors duration-500 group-hover:text-brand-dark">
+                  Оставить заявку
+                </span>
+                <div className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
+              </a>
+            </MagneticButton>
+          </div>
+        </div>
+
+        <div ref={containerRef} className="grid grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-3 md:gap-12">
+          {projects.map((project) => {
+            const previewImages = project.gallery.slice(1, 4);
+            const hiddenImagesCount = Math.max(project.gallery.length - 4, 0);
+
+            return (
+              <SpotlightCard key={project.id} className="portfolio-item p-4 md:p-5">
+                <button
+                  type="button"
+                  onClick={() => setActiveProjectId(project.id)}
+                  className="group block h-full w-full text-left"
+                  aria-label={`Открыть объект ${project.title}`}
+                  data-cursor-portfolio
+                >
+                  <div className="relative h-full">
+                    <DistortionImage
+                      src={project.gallery[0].src}
+                      alt={project.gallery[0].alt}
+                      className="mb-6 aspect-[4/5] rounded-[1.35rem] border border-white/8 bg-black/30"
+                    >
+                      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.08),rgba(10,10,10,0.02)_42%,rgba(10,10,10,0.78))]" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-6">
+                        <div className="translate-y-6 opacity-0 transition-all duration-500 delay-100 group-hover:translate-y-0 group-hover:opacity-100">
+                          <div className="flex flex-wrap gap-4 text-[10px] uppercase tracking-[0.24em] text-white/58">
+                            <span>{project.category}</span>
+                            <span>{project.stage}</span>
+                            <span>{`${project.gallery.length} кадров`}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </DistortionImage>
+
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="mb-4 flex flex-wrap gap-2">
+                          {project.highlights.map((highlight) => (
+                            <span
+                              key={highlight}
+                              className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/58"
+                            >
+                              {highlight}
+                            </span>
+                          ))}
+                        </div>
+
+                        <h3 className="text-2xl font-display leading-tight transition-all duration-500 group-hover:italic md:text-[2rem]">
+                          {project.title}
+                        </h3>
+                        <p className="mt-3 max-w-[20rem] text-sm leading-relaxed text-white/45">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.03] text-white/70 transition-colors duration-500 group-hover:bg-white group-hover:text-brand-dark">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M1 11L11 1M11 1H1M11 1V11"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-3 gap-3">
+                      {previewImages.map((image) => (
+                        <div
+                          key={image.src}
+                          className="overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03]"
+                        >
+                          <img src={image.src} alt={image.alt} className="aspect-[4/5] h-full w-full object-cover" loading="lazy" />
+                        </div>
+                      ))}
+
+                      {hiddenImagesCount > 0 ? (
+                        <div className="flex aspect-[4/5] items-center justify-center rounded-2xl border border-white/8 bg-white/[0.03] text-[12px] uppercase tracking-[0.24em] text-white/58">
+                          {`+${hiddenImagesCount}`}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </button>
+              </SpotlightCard>
+            );
+          })}
+        </div>
+      </section>
+
+      {modalMarkup && typeof document !== 'undefined' ? createPortal(modalMarkup, document.body) : null}
+    </>
   );
 };
