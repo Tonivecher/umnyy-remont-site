@@ -476,7 +476,9 @@ export const Portfolio: React.FC = () => {
 
       {activeProject ? (
         <div
-          className="fixed inset-0 z-[110] overflow-hidden px-4 py-6 md:px-8 md:py-10"
+          data-portfolio-modal-scroll
+          className="fixed inset-0 z-[110] overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="portfolio-dialog-title"
@@ -484,10 +486,9 @@ export const Portfolio: React.FC = () => {
         >
           <div className="absolute inset-0 bg-black/78 backdrop-blur-md" />
 
-          <div className="relative flex h-full items-start justify-center">
+          <div className="relative flex min-h-full items-start justify-center px-4 py-6 md:px-8 md:py-10">
             <div
-              data-portfolio-modal-scroll
-              className="relative flex max-h-full w-full max-w-6xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
+              className="relative flex w-full max-w-6xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#070707]/95 shadow-[0_32px_120px_rgba(0,0,0,0.42)]"
               onClick={(event) => event.stopPropagation()}
             >
               <div className="flex flex-col gap-6 border-b border-white/10 px-6 py-6 md:flex-row md:items-start md:justify-between md:px-8 md:py-8">
@@ -531,11 +532,7 @@ export const Portfolio: React.FC = () => {
                 </button>
               </div>
 
-              <div
-                data-portfolio-modal-scroll
-                className="min-h-0 overflow-y-auto overscroll-contain px-6 pb-6 pt-5 md:px-8 md:pb-8"
-                style={{ WebkitOverflowScrolling: 'touch' }}
-              >
+              <div className="px-6 pb-6 pt-5 md:px-8 md:pb-8">
                 <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <span className="text-[10px] uppercase tracking-[0.28em] text-white/36">
                     Полная подборка по объекту
