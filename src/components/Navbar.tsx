@@ -1,8 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const navLinks = [
+  { href: '#portfolio', label: 'Работы' },
+  { href: '#about', label: 'О нас' },
+  { href: '#testimonials', label: 'Отзывы' },
+  { href: '#contact', label: 'Контакты' },
+];
 
 export const Navbar: React.FC = () => {
   const navRef = useRef<HTMLElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -11,40 +20,110 @@ export const Navbar: React.FC = () => {
         opacity: 0,
         duration: 1.5,
         ease: 'power4.out',
-        delay: 0.5
+        delay: 0.5,
       });
     });
     return () => ctx.revert();
   }, []);
 
-  return (
-    <nav 
-      ref={navRef}
-      className="nav-readable fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-10 mix-blend-difference text-white"
-      aria-label="Main Navigation"
-    >
-      <a href="#" className="block shrink-0">
-        <img
-          src="/brand/symbol-white@3x.png"
-          alt="Умный Ремонт"
-          className="h-10 md:h-12 w-auto"
-        />
-      </a>
-      
-      <div className="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-medium">
-        <a href="#portfolio" className="nav-readable-link transition-opacity">Работы</a>
-        <a href="#about" className="nav-readable-link transition-opacity">О нас</a>
-        <a href="#testimonials" className="nav-readable-link transition-opacity">Отзывы</a>
-        <a href="#contact" className="nav-readable-link transition-opacity">Контакты</a>
-      </div>
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
-      <button 
-        className="md:hidden flex flex-col gap-1.5"
-        aria-label="Toggle Menu"
+  const closeMenu = () => setIsOpen(false);
+
+  return (
+    <>
+      <nav
+        ref={navRef}
+        className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-8 text-white"
+        aria-label="Main Navigation"
       >
-        <span className="w-6 h-px bg-white"></span>
-        <span className="w-6 h-px bg-white"></span>
-      </button>
-    </nav>
+        {/* Backdrop blur bar */}
+        <div className="absolute inset-0 nav-readable pointer-events-none" />
+
+        <a href="#" className="relative block shrink-0" onClick={closeMenu}>
+          <img
+            src="/brand/symbol-white@3x.png"
+            alt="Умный Ремонт"
+            className="h-10 md:h-12 w-auto"
+          />
+        </a>
+
+        {/* Desktop links */}
+        <div className="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-medium relative">
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className="nav-readable-link transition-opacity">
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Mobile burger */}
+        <button
+          className="relative md:hidden flex flex-col justify-center gap-[6px] w-8 h-8"
+          aria-label={isOpen ? 'Закрыть меню' : 'Открыть меню'}
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <motion.span
+            className="block h-px bg-white origin-center"
+            animate={isOpen ? { rotate: 45, y: 7, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          />
+          <motion.span
+            className="block h-px bg-white"
+            animate={isOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+          <motion.span
+            className="block h-px bg-white origin-center"
+            animate={isOpen ? { rotate: -45, y: -7, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </button>
+      </nav>
+
+      {/* Mobile menu overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 z-40 bg-brand-dark flex flex-col justify-center items-center md:hidden"
+            initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
+            exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <nav className="flex flex-col items-center gap-10">
+              {navLinks.map((link, i) => (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  className="text-4xl font-display text-white tracking-tight"
+                  onClick={closeMenu}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ delay: 0.1 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+            </nav>
+
+            <motion.div
+              className="absolute bottom-12 text-[9px] uppercase tracking-[0.3em] opacity-30 text-white"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.3 }}
+              transition={{ delay: 0.4 }}
+            >
+              Умный Ремонт
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

@@ -16,14 +16,6 @@ export default defineConfig(({mode}) => {
               return;
             }
 
-            if (id.includes('@react-three/fiber')) {
-              return 'r3f-vendor';
-            }
-
-            if (id.includes('three')) {
-              return 'three-vendor';
-            }
-
             if (id.includes('framer-motion') || id.includes('/motion/')) {
               return 'motion-vendor';
             }
@@ -52,9 +44,6 @@ export default defineConfig(({mode}) => {
           },
         },
       },
-    },
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
     resolve: {
       alias: {
