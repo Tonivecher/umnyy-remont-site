@@ -9,3 +9,10 @@ deno.lock
 site-preview*.png
 .env*
 !.env.example
+
+# Database
+*.sqlite
+server/data/
+
+# IDE config with secrets
+.cursor/
