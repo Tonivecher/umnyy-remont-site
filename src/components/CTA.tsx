@@ -1,13 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { MagneticButton } from './MagneticButton';
-import { telegramLinks } from '../utils/telegramLinks';
+import { MessengerLinks } from './MessengerLinks';
+import { messengerLinks } from '../utils/messengerLinks';
 
 const contactLinks = {
-  phoneHref: 'tel:+79991234567',
-  phoneLabel: '+7 (999) 123-45-67',
-  whatsappHref: 'https://wa.me/79990000000',
-  telegramHref: telegramLinks.measureContact,
+  phoneHref: messengerLinks.phoneHref,
+  phoneLabel: messengerLinks.phoneDisplay,
 };
 
 export const CTA: React.FC = () => {
@@ -32,45 +30,25 @@ export const CTA: React.FC = () => {
     <section 
       ref={containerRef}
       id="contact"
-      className="py-32 md:py-64 px-8 md:px-24 bg-brand-light text-brand-dark overflow-hidden"
+      className="overflow-hidden bg-brand-light px-6 py-28 text-brand-dark md:px-24 md:py-64"
     >
       <div className="cta-content text-center max-w-4xl mx-auto">
-        <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Начните с понятного расчёта</span>
-        <h2 data-split-heading className="text-5xl md:text-8xl font-display mb-16 leading-none">
+        <span className="mobile-kicker mb-8 block text-[10px] uppercase opacity-60 md:tracking-[0.3em]">Начните с понятного расчёта</span>
+        <h2 data-split-heading className="mb-14 text-4xl font-display leading-[1.02] md:mb-16 md:text-8xl md:leading-none">
           Прикинем бюджет ремонта без давления и строительного тумана.
         </h2>
         
         <div className="flex flex-col gap-6 justify-center items-center">
-          <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
-            <MagneticButton>
-              <a
-                href={contactLinks.whatsappHref}
-                target="_blank"
-                rel="noreferrer"
-                className="group relative inline-flex items-center justify-center py-6 px-12 bg-brand-dark text-white overflow-hidden"
-                aria-label="Написать в WhatsApp"
-              >
-                <span className="relative z-10 text-[10px] uppercase tracking-[0.3em]">WhatsApp</span>
-                <div className="absolute inset-0 bg-brand-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo"></div>
-              </a>
-            </MagneticButton>
-
-            <MagneticButton>
-              <a
-                href={contactLinks.telegramHref}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center py-6 px-12 border border-brand-dark/15 text-[10px] uppercase tracking-[0.3em] hover:border-brand-dark transition-colors"
-                aria-label="Написать в Telegram"
-              >
-                Рассчитать в Telegram
-              </a>
-            </MagneticButton>
-          </div>
+          <MessengerLinks
+            tone="light"
+            layout="stack"
+            showLabels
+            className="w-full max-w-[21rem] md:max-w-xl md:flex-row"
+          />
 
           <a 
             href={contactLinks.phoneHref}
-            className="text-[10px] uppercase tracking-[0.3em] border-b border-brand-dark/20 pb-2 hover:border-brand-dark transition-colors"
+            className="premium-action min-h-0 border-b border-brand-dark/20 pb-2 text-[10px] uppercase tracking-[0.18em] hover:border-brand-dark md:tracking-[0.3em]"
           >
             {contactLinks.phoneLabel}
           </a>

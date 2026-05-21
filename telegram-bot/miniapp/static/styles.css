@@ -119,12 +119,22 @@ h3 {
 }
 
 .brand-mark {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-style: italic;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
   color: var(--text-main);
+  text-decoration: none;
 }
-.brand-mark span:nth-child(2) { color: var(--accent-primary); }
+
+.brand-mark img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
 
 .nav-pill {
   font-size: 0.75rem;

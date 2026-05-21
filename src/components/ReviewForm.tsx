@@ -147,13 +147,13 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
         </div>
 
         <div className="pt-4">
-          <MagneticButton>
+          <MagneticButton className="w-full sm:w-auto">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative py-4 px-10 bg-white text-brand-dark overflow-hidden font-medium text-[10px] uppercase tracking-[0.2em] disabled:opacity-60"
+              className="premium-action group relative w-full overflow-hidden bg-white px-8 py-4 text-[10px] font-medium uppercase text-brand-dark disabled:opacity-60 sm:w-auto sm:px-10"
             >
-              <span className="relative z-10">
+              <span className="mobile-action-text relative z-10 md:tracking-[0.2em]">
                 {isSubmitting ? 'Отправка...' : 'Отправить на модерацию'}
               </span>
               <div className="absolute inset-0 bg-brand-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>

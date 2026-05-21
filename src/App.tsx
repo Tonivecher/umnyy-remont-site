@@ -21,9 +21,11 @@ export default function App() {
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const lenis = new Lenis({
-      lerp: 0.08,
-      smoothWheel: true,
+      lerp: isMobileViewport ? 0.14 : 0.08,
+      smoothWheel: !prefersReducedMotion,
       gestureOrientation: 'vertical',
     });
 
@@ -57,6 +59,11 @@ export default function App() {
           }
         });
       });
+
+      if (isMobileViewport || prefersReducedMotion) {
+        gsap.set(headings, { opacity: 1, y: 0 });
+        return;
+      }
 
       headings.forEach((heading) => {
         const split = new SplitType(heading, {

@@ -11,9 +11,12 @@ export const About: React.FC = () => {
   const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+
     const ctx = gsap.context(() => {
       gsap.from(textRef.current, {
-        x: -50,
+        x: isMobileViewport ? 0 : -50,
+        y: isMobileViewport ? 28 : 0,
         opacity: 0,
         duration: 1.5,
         scrollTrigger: {
@@ -40,7 +43,7 @@ export const About: React.FC = () => {
     <section 
       ref={sectionRef}
       id="about"
-      className="py-32 md:py-64 px-8 md:px-24 grid md:grid-cols-2 gap-16 md:gap-32 items-center bg-brand-light text-brand-dark"
+      className="grid items-center gap-16 bg-brand-light px-6 py-28 text-brand-dark md:grid-cols-2 md:gap-32 md:px-24 md:py-64"
     >
       <div ref={textRef} className="max-w-xl">
         <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Философия</span>
@@ -67,8 +70,8 @@ export const About: React.FC = () => {
         </div>
         <div className="mt-12">
           <MagneticButton>
-            <button className="group relative py-4 px-8 border border-brand-dark/20 overflow-hidden transition-colors hover:text-white">
-              <span className="relative z-10 text-[10px] uppercase tracking-[0.2em]">Узнать о процессе</span>
+            <button className="premium-action group relative w-full overflow-hidden border border-brand-dark/20 px-8 py-4 hover:text-white sm:w-auto">
+              <span className="mobile-action-text relative z-10 text-[10px] uppercase md:tracking-[0.2em]">Узнать о процессе</span>
               <div className="absolute inset-0 bg-brand-dark translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo"></div>
             </button>
           </MagneticButton>

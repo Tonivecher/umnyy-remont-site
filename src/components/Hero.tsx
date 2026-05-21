@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { telegramLinks } from '../utils/telegramLinks';
+import { MessengerLinks } from './MessengerLinks';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,19 +12,23 @@ export const Hero: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const ctx = gsap.context(() => {
       const fadingElements = contentRef.current?.querySelectorAll('[data-hero-fade]') ?? [];
 
       gsap.from(fadingElements, {
-        y: 100,
+        y: isMobileViewport ? 28 : 100,
         opacity: 0,
-        duration: 2,
-        stagger: 0.2,
+        duration: prefersReducedMotion ? 0.01 : isMobileViewport ? 1 : 2,
+        stagger: isMobileViewport ? 0.12 : 0.2,
         ease: 'power4.out',
-        delay: 0.8
+        delay: isMobileViewport ? 0.35 : 0.8
       });
 
-      // Parallax effect
+      if (isMobileViewport || prefersReducedMotion) return;
+
       gsap.to(bgRef.current, {
         yPercent: 30,
         ease: 'none',
@@ -35,7 +40,6 @@ export const Hero: React.FC = () => {
         }
       });
 
-      // Content parallax (slower)
       gsap.to(contentRef.current, {
         yPercent: -20,
         ease: 'none',
@@ -54,7 +58,7 @@ export const Hero: React.FC = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden"
     >
       {/* Background Image */}
       <div 
@@ -74,35 +78,42 @@ export const Hero: React.FC = () => {
       {/* Hero Content */}
       <div 
         ref={contentRef}
-        className="relative z-10 text-center px-4"
+        className="hero-readable-panel relative z-10 w-full px-5 text-center"
       >
         <h1
           data-split-heading
-          className="text-7xl md:text-[12vw] font-display leading-none mb-6 tracking-tighter"
+          className="hero-brand-title mx-auto mb-6 max-w-[11ch] text-[3.6rem] leading-[0.96] sm:max-w-none sm:text-7xl md:max-w-[13ch] md:text-[clamp(5.5rem,8.8vw,8.75rem)] md:leading-[0.94]"
         >
           Умный Ремонт
         </h1>
-        <p data-hero-fade className="text-xs md:text-sm uppercase tracking-[0.5em] font-light opacity-80">
+        <p data-hero-fade className="hero-support-text mobile-kicker mx-auto max-w-[28ch] text-[0.68rem] font-medium uppercase leading-loose md:max-w-none md:text-sm md:tracking-[0.5em]">
           Премиальная реализация интерьеров
         </p>
-        <div data-hero-fade className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div data-hero-fade className="mx-auto mt-9 flex w-full max-w-[20rem] flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
           <a
             href={telegramLinks.estimateHero}
             target="_blank"
             rel="noreferrer"
-            className="group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-brand-accent px-8 py-5 text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-dark transition hover:text-white"
+            className="premium-action group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-brand-accent px-6 py-4 text-[10px] font-semibold uppercase text-brand-dark hover:text-white sm:px-8 sm:py-5"
           >
-            <span className="relative z-10">Рассчитать ремонт</span>
+            <span className="mobile-action-text relative z-10 md:tracking-[0.28em]">Рассчитать ремонт</span>
             <span className="absolute inset-0 translate-y-full bg-brand-dark transition-transform duration-500 group-hover:translate-y-0" />
           </a>
           <a
             href={telegramLinks.channel}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center border border-white/25 px-8 py-5 text-[10px] uppercase tracking-[0.28em] text-white/85 transition hover:border-white hover:text-white"
+            className="premium-action hero-support-text inline-flex items-center justify-center border border-white/45 bg-black/20 px-6 py-4 text-[10px] uppercase text-white hover:border-white hover:bg-black/30 sm:px-8 sm:py-5"
           >
-            Канал с советами
+            <span className="mobile-action-text md:tracking-[0.28em]">Канал с советами</span>
           </a>
+        </div>
+
+        <div data-hero-fade className="mx-auto mt-5 flex w-full max-w-[20rem] flex-col items-center gap-3 sm:max-w-none">
+          <span className="hero-support-text text-[9px] font-semibold uppercase tracking-[0.22em]">
+            Написать напрямую
+          </span>
+          <MessengerLinks tone="dark" showLabels={false} />
         </div>
       </div>
 

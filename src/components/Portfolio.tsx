@@ -203,7 +203,7 @@ export const Portfolio: React.FC = () => {
 
   return (
     <section id="portfolio" className="bg-brand-dark px-6 py-24 md:px-12 xl:px-24 md:py-40">
-      <div className="mb-20 md:mb-32 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+      <div className="mb-20 flex flex-col gap-10 md:mb-32 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
           <span className="mb-6 block text-[10px] uppercase tracking-[0.3em] opacity-40">
             Избранные работы
@@ -223,10 +223,10 @@ export const Portfolio: React.FC = () => {
               href={portfolioLeadHref}
               target="_blank"
               rel="noreferrer"
-              className="group relative inline-flex items-center justify-center overflow-hidden border border-white/20 px-10 py-5 text-[11px] uppercase tracking-[0.25em] text-white transition-colors hover:border-white/40"
+              className="premium-action group relative inline-flex w-full items-center justify-center overflow-hidden border border-white/20 px-8 py-5 text-[10px] uppercase text-white hover:border-white/40 sm:w-auto sm:px-10 sm:text-[11px]"
               aria-label="Заказать проект в Telegram"
             >
-              <span className="relative z-10 transition-colors duration-500 group-hover:text-brand-dark">
+              <span className="mobile-action-text relative z-10 transition-colors duration-500 group-hover:text-brand-dark md:tracking-[0.25em]">
                 Рассчитать проект
               </span>
               <div className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />

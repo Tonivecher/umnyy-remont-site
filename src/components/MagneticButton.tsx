@@ -13,6 +13,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({ children, classN
   useEffect(() => {
     const button = buttonRef.current;
     if (!button) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
 
     const xTo = gsap.quickTo(button, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
     const yTo = gsap.quickTo(button, "y", { duration: 1, ease: "elastic.out(1, 0.3)" });
@@ -43,7 +44,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({ children, classN
   }, []);
 
   return (
-    <div ref={buttonRef} data-cursor-magnetic className={cn("inline-block", className)}>
+    <div ref={buttonRef} data-cursor-magnetic className={cn("inline-block max-w-full", className)}>
       {children}
     </div>
   );
