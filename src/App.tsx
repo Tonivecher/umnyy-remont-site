@@ -80,9 +80,9 @@ export default function App() {
           yPercent: 0,
           opacity: 1,
           rotateX: 0,
-          duration: 1.2,
+          duration: 0.85,
           ease: 'power4.out',
-          stagger: 0.018,
+          stagger: 0.012,
           scrollTrigger: {
             trigger: heading,
             start: 'top 85%',

@@ -9,9 +9,9 @@ export const Footer: React.FC = () => {
         <div>
           <a href="#" className="inline-block mb-8">
             <img
-              src="/brand/logo-white@3x.png"
+              src="/brand/premium-logo.png"
               alt="Умный Ремонт"
-              className="w-40 md:w-44 h-auto"
+              className="h-12 md:h-16 w-auto rounded-sm"
             />
           </a>
           <p className="text-sm opacity-40 max-w-sm leading-relaxed">

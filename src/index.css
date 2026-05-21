@@ -70,6 +70,8 @@
 .split-line {
   display: block;
   overflow: hidden;
+  padding-bottom: 0.25em;
+  margin-bottom: -0.25em;
 }
 
 .split-char {
