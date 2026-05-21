@@ -1,6 +1,6 @@
 meta:
   locale: ru-RU
-  name: "UMID estimate material norms"
+  name: "Умный Ремонт — нормы материалов"
   note: "Базовые нормы расхода для черновой и чистовой отделки. Значения можно менять под объект."
 
 materials:

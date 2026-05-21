@@ -37,12 +37,12 @@ except ValueError as exc:
 DATABASE_URL = os.getenv("DATABASE_URL") or None
 SQLITE_PATH = os.getenv("SQLITE_PATH", "data/app.sqlite")
 
-DEFAULT_SMARTREPAIR_MINI_APP_URL = "https://smartrepair-telegram-miniapp.vercel.app"
+DEFAULT_MINI_APP_URL = "http://localhost:8080/miniapp"
 
 MINI_APP_URL = (
     os.getenv("MINI_APP_URL")
-    or DEFAULT_SMARTREPAIR_MINI_APP_URL
-).strip() or DEFAULT_SMARTREPAIR_MINI_APP_URL
+    or DEFAULT_MINI_APP_URL
+).strip() or DEFAULT_MINI_APP_URL
 MINI_APP_HOST = (os.getenv("MINI_APP_HOST") or "0.0.0.0").strip() or "0.0.0.0"
 
 _mini_app_port_raw = (os.getenv("MINI_APP_PORT") or os.getenv("PORT") or "8080").strip()
@@ -90,3 +90,7 @@ WEBHOOK_SECRET_TOKEN = (
     os.getenv("WEBHOOK_SECRET_TOKEN")
     or hashlib.sha256(BOT_TOKEN.encode("utf-8")).hexdigest()[:32]
 )
+
+TELEGRAM_CHANNEL_URL = (os.getenv("TELEGRAM_CHANNEL_URL") or "https://t.me/proumniremont").strip()
+PUBLIC_SITE_URL = (os.getenv("PUBLIC_SITE_URL") or "https://umniremont.pro").strip()
+BOT_PUBLIC_URL = (os.getenv("BOT_PUBLIC_URL") or "https://t.me/umniyremontbot").strip()

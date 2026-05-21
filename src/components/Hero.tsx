@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { telegramLinks } from '../utils/telegramLinks';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -84,6 +85,25 @@ export const Hero: React.FC = () => {
         <p data-hero-fade className="text-xs md:text-sm uppercase tracking-[0.5em] font-light opacity-80">
           Премиальная реализация интерьеров
         </p>
+        <div data-hero-fade className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a
+            href={telegramLinks.estimateHero}
+            target="_blank"
+            rel="noreferrer"
+            className="group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-brand-accent px-8 py-5 text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-dark transition hover:text-white"
+          >
+            <span className="relative z-10">Рассчитать ремонт</span>
+            <span className="absolute inset-0 translate-y-full bg-brand-dark transition-transform duration-500 group-hover:translate-y-0" />
+          </a>
+          <a
+            href={telegramLinks.channel}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center border border-white/25 px-8 py-5 text-[10px] uppercase tracking-[0.28em] text-white/85 transition hover:border-white hover:text-white"
+          >
+            Канал с советами
+          </a>
+        </div>
       </div>
 
       {/* Scroll Indicator */}

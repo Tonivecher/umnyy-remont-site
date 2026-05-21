@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { telegramLinks } from '../utils/telegramLinks';
+
 export const Footer: React.FC = () => {
   return (
     <footer className="py-20 px-8 md:px-24 border-t border-white/5 bg-brand-dark">
@@ -18,10 +20,19 @@ export const Footer: React.FC = () => {
         </div>
 
         <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] mb-6 block opacity-40">Юридическая информация</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] mb-6 block opacity-40">Telegram</span>
           <ul className="flex flex-col gap-4 text-xs uppercase tracking-widest">
+            <li>
+              <a href={telegramLinks.measureContact} target="_blank" rel="noreferrer" className="hover:opacity-50 transition-opacity">
+                Бот для расчёта и заявки
+              </a>
+            </li>
+            <li>
+              <a href={telegramLinks.channel} target="_blank" rel="noreferrer" className="hover:opacity-50 transition-opacity">
+                Канал «Про умный ремонт»
+              </a>
+            </li>
             <li><a href="#" className="hover:opacity-50 transition-opacity">Политика конфиденциальности</a></li>
-            <li><a href="#" className="hover:opacity-50 transition-opacity">Условия использования</a></li>
           </ul>
         </div>
       </div>

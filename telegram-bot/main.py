@@ -34,6 +34,9 @@ from config import (
     WEBHOOK_PATH,
     WEBHOOK_URL,
     WEBHOOK_SECRET_TOKEN,
+    TELEGRAM_CHANNEL_URL,
+    PUBLIC_SITE_URL,
+    BOT_PUBLIC_URL,
 )
 from db import EstimateSessionRepository, get_default_database
 from estimate.reporting import calculate_estimate_summary, format_estimate_report
@@ -167,7 +170,7 @@ async def main():
         try:
             await bot.set_chat_menu_button(
                 menu_button=MenuButtonWebApp(
-                    text="SmartRepair",
+                    text="Умный расчёт",
                     web_app=WebAppInfo(url=MINI_APP_URL),
                 )
             )
@@ -213,13 +216,14 @@ async def main():
 
     def main_menu_keyboard() -> ReplyKeyboardMarkup:
         estimate_button = (
-            KeyboardButton(text="Рассчитать смету", web_app=WebAppInfo(url=MINI_APP_URL))
+            KeyboardButton(text="Рассчитать ремонт", web_app=WebAppInfo(url=MINI_APP_URL))
             if MINI_APP_URL
-            else KeyboardButton(text="Рассчитать смету")
+            else KeyboardButton(text="Рассчитать ремонт")
         )
         return ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text="Начать"), estimate_button],
+                [KeyboardButton(text="Оставить заявку"), estimate_button],
+                [KeyboardButton(text="Канал"), KeyboardButton(text="Сайт")],
             ],
             resize_keyboard=True,
         )
@@ -229,7 +233,9 @@ async def main():
             return None
         return InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Открыть SmartRepair Mini App", web_app=WebAppInfo(url=MINI_APP_URL))]
+                [InlineKeyboardButton(text="Рассчитать ремонт", web_app=WebAppInfo(url=MINI_APP_URL))],
+                [InlineKeyboardButton(text="Оставить заявку", url=f"{BOT_PUBLIC_URL}?start=measure_bot_cta")],
+                [InlineKeyboardButton(text="Канал с советами", url=TELEGRAM_CHANNEL_URL)],
             ]
         )
 
@@ -767,6 +773,10 @@ async def main():
         data = await state.get_data()
         lead_source = normalize_lead_source(str(data.get("source") or "telegram"))
         data["source"] = lead_source
+        user = message.from_user
+        data["telegram_user_id"] = str(user.id) if user else ""
+        data["telegram_username"] = f"@{user.username}" if user and user.username else ""
+        data["telegram_full_name"] = user.full_name if user else ""
 
         # Запись в Google Sheets (в потоке, чтобы не блокировать event loop)
         try:
@@ -783,11 +793,15 @@ async def main():
             f"Адрес: {data['address']}\n"
             f"Площадь: {data['area']} м²\n"
             f"Бюджет: {data['budget']}\n"
-            f"Источник: {lead_source}"
+            f"Источник: {lead_source}\n"
+            f"Telegram: {data.get('telegram_username') or data.get('telegram_full_name') or data.get('telegram_user_id') or '-'}"
         )
 
         await bot.send_message(ADMIN_ID, text)
-        await message.answer("Спасибо. Мы свяжемся с вами в ближайшее время.")
+        await message.answer(
+            "Спасибо. Заявка уже у нас — скоро свяжемся с вами.\n\n"
+            f"А пока можно заглянуть в канал: {TELEGRAM_CHANNEL_URL}"
+        )
         await state.clear()
         debug_log("state_cleared", chat_id=message.chat.id)
 
@@ -835,10 +849,9 @@ async def main():
                 lead_source=lead_source,
             )
             await message.answer(
-                "Добро пожаловать в архитектурную студию UMID. "
-                "Ответьте на несколько коротких вопросов, "
-                "чтобы мы подготовили предварительную смету по вашему объекту.\n\n"
-                "Совет по отделке: /finish «вопрос» или /ask «вопрос по базе знаний»"
+                "Здравствуйте! Это «Умный Ремонт». "
+                "Ответьте на несколько коротких вопросов — подготовим заявку для точного расчёта по вашему объекту.\n\n"
+                "Если хотите сначала прикинуть бюджет, нажмите «Рассчитать ремонт»."
             )
             await message.answer("Как вас зовут?")
             return
@@ -851,7 +864,7 @@ async def main():
             )
             if MINI_APP_URL:
                 await message.answer(
-                    "Откройте SmartRepair Mini App для предварительного расчета стоимости материалов.",
+                    "Откройте мини‑расчёт «Умного Ремонта»: он покажет предварительный объём материалов, работ и ориентир бюджета.",
                     reply_markup=mini_app_open_keyboard(),
                 )
                 return
@@ -865,23 +878,21 @@ async def main():
         await message.answer_photo(
             photo=banner,
             caption=(
-                "<b>Архитектурная студия UMID</b>\n\n"
-                "Мы подготовим предварительную смету и предложим оптимальное "
-                "решение под ваш объект.\n"
-                "Ответьте на короткий бриф, это займет не более минуты.\n\n"
-                "Есть вопрос по отделке? Используйте /finish «вопрос» "
-                "или /ask «вопрос по базе знаний»."
+                "<b>Умный Ремонт</b>\n\n"
+                "Поможем прикинуть бюджет ремонта и понять, какие материалы понадобятся.\n"
+                "Можно начать с мини‑расчёта или сразу оставить заявку на консультацию.\n\n"
+                f"Канал с полезными разборами: {TELEGRAM_CHANNEL_URL}"
             ),
             parse_mode="HTML",
             reply_markup=start_keyboard
         )
         if MINI_APP_URL:
             await message.answer(
-                "Открыть SmartRepair Mini App можно кнопкой ниже или через кнопку меню бота.",
+                "Откройте мини‑расчёт кнопкой ниже или через кнопку меню бота. После расчёта можно сразу оставить заявку специалисту.",
                 reply_markup=mini_app_open_keyboard(),
             )
 
-    @dp.message(F.text == "Начать")
+    @dp.message(F.text.in_({"Начать", "Оставить заявку"}))
     async def start_survey(message: Message, state: FSMContext):
         debug_log(
             "start_survey_triggered",
@@ -952,21 +963,32 @@ async def main():
     async def estimate_start(message: Message, state: FSMContext):
         if MINI_APP_URL:
             await message.answer(
-                "Откройте SmartRepair Mini App для расчета сметы.",
+                "Откройте мини‑расчёт «Умного Ремонта»: материалы, работы, тарифы и ориентир бюджета.",
                 reply_markup=mini_app_open_keyboard(),
             )
             return
         await start_or_resume_estimate(message, state)
 
+    @dp.message(F.text == "Канал")
+    async def channel_button(message: Message):
+        await message.answer(
+            "Канал «Про умный ремонт» — простые разборы про сметы, материалы и спокойный ремонт:\n"
+            f"{TELEGRAM_CHANNEL_URL}"
+        )
+
+    @dp.message(F.text == "Сайт")
+    async def site_button(message: Message):
+        await message.answer(f"Сайт «Умного Ремонта»: {PUBLIC_SITE_URL}")
+
     @dp.message(Command("estimate_chat"))
     async def estimate_start_chat(message: Message, state: FSMContext):
         await start_or_resume_estimate(message, state)
 
-    @dp.message(F.text == "Рассчитать смету")
+    @dp.message(F.text.in_({"Рассчитать смету", "Рассчитать ремонт"}))
     async def estimate_start_button(message: Message, state: FSMContext):
         if MINI_APP_URL:
             await message.answer(
-                "Кнопка SmartRepair доступна в меню. Если не открылась, нажмите кнопку ниже.",
+                "Если мини‑расчёт не открылся автоматически, нажмите кнопку ниже. После расчёта можно отправить заявку специалисту.",
                 reply_markup=mini_app_open_keyboard(),
             )
             return
@@ -1152,7 +1174,7 @@ async def main():
         report_text = format_estimate_report(summary)
         await send_long_text(message, report_text, reply_markup=estimate_actions_keyboard())
         await message.answer(
-            "Готово. Для нового расчета: /estimate или кнопка «Рассчитать смету»."
+            "Готово. Для нового расчёта: /estimate или кнопка «Рассчитать ремонт»."
         )
 
     @dp.message(F.text == "Завершить смету")
