@@ -1,0 +1,59 @@
+# Approximate default labor prices for Moscow, collected on 2026-03-05.
+# Values are bootstrap defaults for quick estimates and must be editable.
+#
+# Source references used for baseline ranges:
+# - Profi (шпаклевка): https://profi.ru/remont/malyarnye-shtukaturnye-raboty/shpatlevka/shpaklevka-sten/price/
+# - Hands (покраска, за слой): https://hands.ru/service/pokrasit-steny/price/
+# - Штукатурка: https://shtukaturka-v-moskve.ru/cena-shtykatyrki.html
+# - Плитка: https://remelit.ru/plitochnye-raboty/ ; https://redfiks.com/blog/prices/tiler
+# - Электрика: https://0220.ru/prajs ; https://td-tsk.ru/services/elektromontazhnye-raboty/
+# - Сантехника: https://santehnik-center.ru/price/ ; https://www.santehnik24.pro/tseny ;
+#               https://remont-uroven.ru/articles/santexnicheskie-rabotyi-v-moskve.html
+
+meta:
+  city: "Moscow"
+  currency: "RUB"
+  note: "Цены ориентировочные (работа без материалов), для первичной сметы."
+
+tiers:
+  econom:
+    plaster_wall_m2: 550
+    putty_wall_m2: 350
+    primer_m2: 90
+    paint_layer_m2: 220
+    screed_floor_m2: 500
+    laminate_floor_m2: 450
+    tile_wall_m2: 1800
+    tile_floor_m2: 1700
+    electrical_point_unit: 1800
+    plumbing_point_unit: 2300
+    fixture_install_unit: 2500
+    doorway_finish_unit: 3200
+
+  standard:
+    plaster_wall_m2: 700
+    putty_wall_m2: 500
+    primer_m2: 130
+    paint_layer_m2: 320
+    screed_floor_m2: 700
+    laminate_floor_m2: 650
+    tile_wall_m2: 2500
+    tile_floor_m2: 2300
+    electrical_point_unit: 2500
+    plumbing_point_unit: 3200
+    fixture_install_unit: 3600
+    doorway_finish_unit: 4500
+
+  premium:
+    plaster_wall_m2: 950
+    putty_wall_m2: 700
+    primer_m2: 180
+    paint_layer_m2: 450
+    screed_floor_m2: 950
+    laminate_floor_m2: 900
+    tile_wall_m2: 3400
+    tile_floor_m2: 3200
+    electrical_point_unit: 3500
+    plumbing_point_unit: 4500
+    fixture_install_unit: 5000
+    doorway_finish_unit: 6500

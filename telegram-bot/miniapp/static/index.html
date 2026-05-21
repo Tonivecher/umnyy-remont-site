@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>UMID Estimate Mini App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/miniapp/static/styles.css?v=4" />
+  </head>
+  <body>
+    <div class="bg bg-1" aria-hidden="true"></div>
+    <div class="bg bg-2" aria-hidden="true"></div>
+
+    <main class="layout">
+      <header class="hero reveal">
+        <p class="eyebrow">Архитектурная студия UMID</p>
+        <h1>Смета в Mini App</h1>
+        <p class="subtitle">Пошагово: объект -> комнаты -> расчет. Все сохраняется в вашем профиле.</p>
+        <div id="statusLine" class="status-line">Загрузка сессии…</div>
+      </header>
+
+      <section id="openInTelegramHint" class="card warning hidden reveal">
+        <h2>Откройте Mini App через Telegram</h2>
+        <p class="helper">
+          Сейчас страница открыта без Telegram-авторизации. Доступен только локальный черновик (без серверного сохранения и расчета).
+        </p>
+      </section>
+
+      <section class="card reveal cabinet-card">
+        <div class="cabinet-head">
+          <div id="cabinetAvatar" class="avatar">
+            <img id="cabinetAvatarImage" class="avatar-image hidden" alt="avatar" />
+            <span id="cabinetAvatarText">UM</span>
+          </div>
+          <div>
+            <h2 id="profileName">Личный кабинет</h2>
+            <p id="profileHandle" class="muted">@user</p>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-item">
+            <p class="label">Профиль ID</p>
+            <p id="profileId" class="value">-</p>
+          </article>
+          <article class="stat-item">
+            <p class="label">Комнат в проекте</p>
+            <p id="profileRooms" class="value">0</p>
+          </article>
+          <article class="stat-item">
+            <p class="label">Последнее сохранение</p>
+            <p id="profileLastSaved" class="value">-</p>
+          </article>
+          <article class="stat-item">
+            <p class="label">Статус</p>
+            <p id="profileStatus" class="value">Черновик</p>
+          </article>
+        </div>
+
+        <label class="field">
+          <span>Предпочтительный тариф</span>
+          <div id="favoriteTierChips" class="chips">
+            <button class="chip active" data-tier="standard" type="button">Standard</button>
+            <button class="chip" data-tier="econom" type="button">Econom</button>
+            <button class="chip" data-tier="premium" type="button">Premium</button>
+          </div>
+        </label>
+
+        <div class="progress-wrap">
+          <div class="progress-head">
+            <span>Прогресс заполнения</span>
+            <strong id="profileProgressText">0%</strong>
+          </div>
+          <div class="progress-track">
+            <div id="profileProgressBar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <button id="resetSessionBtn" class="btn danger" type="button">Сбросить сессию</button>
+        </div>
+      </section>
+
+      <section class="card reveal">
+        <h2>Шаг 1. Объект</h2>
+        <div class="grid two">
+          <label class="field">
+            <span>Город / регион</span>
+            <input id="cityInput" type="text" placeholder="Москва" />
+          </label>
+          <label class="field">
+            <span>Высота потолка, м</span>
+            <input id="ceilingInput" type="number" min="2" max="5" step="0.1" placeholder="2.7" />
+          </label>
+        </div>
+      </section>
+
+      <section class="card reveal">
+        <div class="section-head">
+          <h2>Шаг 2. Комнаты</h2>
+          <button id="addRoomBtn" class="btn ghost" type="button">+ Добавить</button>
+        </div>
+        <p class="helper">Откройте редактор комнаты. Содержимое разделено на вкладки, чтобы не перегружать экран.</p>
+        <div id="roomsList" class="rooms-list"></div>
+      </section>
+
+      <section id="editorCard" class="card reveal hidden">
+        <div class="section-head">
+          <h2 id="editorTitle">Новая комната</h2>
+          <button id="closeEditorBtn" class="btn subtle" type="button">Закрыть</button>
+        </div>
+
+        <div id="editorStepTabs" class="editor-tabs">
+          <button class="editor-tab active" data-editor-step="base" type="button">1. База</button>
+          <button class="editor-tab" data-editor-step="geometry" type="button">2. Геометрия</button>
+          <button class="editor-tab" data-editor-step="finishes" type="button">3. Отделка</button>
+          <button class="editor-tab" data-editor-step="points" type="button">4. Точки</button>
+        </div>
+
+        <section class="editor-pane" data-editor-pane="base">
+          <label class="field">
+            <span>Быстрый пресет</span>
+            <div id="roomPresetChips" class="chips">
+              <button class="chip" data-preset="kitchen" type="button">Кухня</button>
+              <button class="chip" data-preset="bathroom" type="button">Санузел</button>
+              <button class="chip" data-preset="bedroom" type="button">Спальня</button>
+              <button class="chip" data-preset="living_room" type="button">Гостиная</button>
+            </div>
+          </label>
+
+          <div class="grid two">
+            <label class="field">
+              <span>Название</span>
+              <input id="roomName" type="text" placeholder="Кухня" />
+            </label>
+            <label class="field">
+              <span>Тип комнаты</span>
+              <select id="roomType">
+                <option value="kitchen">Кухня</option>
+                <option value="bathroom">Санузел</option>
+                <option value="bedroom">Спальня</option>
+                <option value="living_room">Гостиная</option>
+                <option value="hallway">Коридор</option>
+                <option value="other">Другое</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Площадь пола, м²</span>
+              <input id="roomArea" type="number" min="0.1" step="0.1" placeholder="18" />
+            </label>
+            <label class="field">
+              <span>Высота комнаты, м (опционально)</span>
+              <input id="roomHeight" type="number" min="2" max="5" step="0.1" placeholder="использовать общую" />
+            </label>
+          </div>
+        </section>
+
+        <section class="editor-pane hidden" data-editor-pane="geometry">
+          <label class="field">
+            <span>Геометрия стен</span>
+            <div class="chips" id="geometryMode">
+              <button class="chip active" data-mode="auto" type="button">Допущение (квадрат)</button>
+              <button class="chip" data-mode="perimeter" type="button">Периметр</button>
+              <button class="chip" data-mode="dimensions" type="button">Длина × ширина</button>
+            </div>
+          </label>
+
+          <div class="grid two" id="geometryInputs">
+            <label class="field hidden" data-for="perimeter">
+              <span>Периметр, м</span>
+              <input id="roomPerimeter" type="number" min="1" step="0.1" placeholder="17.2" />
+            </label>
+            <label class="field hidden" data-for="dimensions">
+              <span>Длина, м</span>
+              <input id="roomLength" type="number" min="1" step="0.1" placeholder="4.5" />
+            </label>
+            <label class="field hidden" data-for="dimensions">
+              <span>Ширина, м</span>
+              <input id="roomWidth" type="number" min="1" step="0.1" placeholder="3.2" />
+            </label>
+          </div>
+        </section>
+
+        <section class="editor-pane hidden" data-editor-pane="finishes">
+          <div class="toggle-grid">
+            <label class="toggle"><input id="wallsPlaster" type="checkbox" checked /> <span>Стены: штукатурка</span></label>
+            <label class="toggle"><input id="wallsPutty" type="checkbox" checked /> <span>Стены: шпаклёвка</span></label>
+            <label class="toggle"><input id="wallsPaint" type="checkbox" checked /> <span>Стены: покраска</span></label>
+            <label class="toggle"><input id="wallsTiles" type="checkbox" /> <span>Стены: плитка</span></label>
+            <label class="toggle"><input id="floorScreed" type="checkbox" checked /> <span>Пол: стяжка</span></label>
+            <label class="toggle"><input id="floorTiles" type="checkbox" /> <span>Пол: плитка</span></label>
+            <label class="toggle"><input id="floorLaminate" type="checkbox" /> <span>Пол: ламинат</span></label>
+          </div>
+        </section>
+
+        <section class="editor-pane hidden" data-editor-pane="points">
+          <div class="grid two">
+            <label class="field">
+              <span>Электроточки (шт)</span>
+              <input id="electricalPoints" type="number" min="0" step="1" placeholder="12" />
+            </label>
+            <label class="field">
+              <span>Сантехточки (шт)</span>
+              <input id="plumbingPoints" type="number" min="0" step="1" placeholder="5" />
+            </label>
+          </div>
+        </section>
+
+        <div class="row-actions editor-actions">
+          <button id="prevEditorStepBtn" class="btn subtle" type="button">Назад</button>
+          <button id="nextEditorStepBtn" class="btn ghost" type="button">Далее</button>
+          <button id="saveRoomBtn" class="btn primary" type="button">Сохранить комнату</button>
+        </div>
+      </section>
+
+      <section id="resultCard" class="card reveal hidden">
+        <h2>Шаг 3. Результат</h2>
+        <div id="laborCards" class="labor-cards"></div>
+
+        <h3>Сценарии бюджета</h3>
+        <div id="scenarioCards" class="labor-cards"></div>
+
+        <h3>Материалы</h3>
+        <div id="materialsList" class="materials-list"></div>
+
+        <h3>Допущения</h3>
+        <ul id="assumptionsList" class="assumptions"></ul>
+
+        <div class="row-actions">
+          <button id="copyReportBtn" class="btn ghost" type="button">Копировать отчет</button>
+          <button id="downloadJsonBtn" class="btn ghost" type="button">Скачать JSON</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="action-dock">
+      <button id="saveSessionBtn" class="btn ghost" type="button">Сохранить черновик</button>
+      <button id="calculateBtn" class="btn primary" type="button">Рассчитать смету</button>
+    </footer>
+
+    <!-- Контейнер для кастомных Toast-уведомлений -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Кастомное модальное окно подтверждения -->
+    <div id="customConfirmModal" class="confirm-modal-overlay hidden">
+      <div class="confirm-modal-card">
+        <h2 id="confirmTitle" class="confirm-title">Подтверждение</h2>
+        <p id="confirmMessage" class="confirm-message">Вы уверены?</p>
+        <div class="confirm-modal-actions">
+          <button id="confirmCancelBtn" class="btn ghost" type="button">Отмена</button>
+          <button id="confirmOkBtn" class="btn primary" type="button">Подтвердить</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Стеклянный оверлей загрузки -->
+    <div id="spinnerOverlay" class="spinner-overlay hidden">
+      <div class="spinner-container">
+        <div class="spinner-ring"></div>
+        <p id="spinnerMessage" class="spinner-message">Формируем архитектурную смету...</p>
+      </div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="/miniapp/static/app.js?v=4"></script>
+  </body>
+</html>

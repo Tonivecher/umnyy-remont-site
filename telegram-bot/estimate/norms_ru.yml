@@ -1,0 +1,47 @@
+meta:
+  locale: ru-RU
+  name: "UMID estimate material norms"
+  note: "Базовые нормы расхода для черновой и чистовой отделки. Значения можно менять под объект."
+
+materials:
+  plaster:
+    label: "Штукатурка"
+    unit: "kg"
+    consumption_per_m2_per_mm: 1.0
+    package_size: 30
+    package_unit: "bag"
+
+  putty:
+    label: "Шпаклевка"
+    unit: "kg"
+    consumption_per_m2: 1.2
+    package_size: 20
+    package_unit: "bag"
+
+  primer:
+    label: "Грунтовка"
+    unit: "l"
+    consumption_per_m2: 0.12
+    package_size: 10
+    package_unit: "can"
+
+  paint:
+    label: "Краска"
+    unit: "l"
+    consumption_per_m2_per_layer: 0.12
+    package_size: 9
+    package_unit: "can"
+
+  tile_glue:
+    label: "Плиточный клей"
+    unit: "kg"
+    consumption_per_m2: 4.5
+    package_size: 25
+    package_unit: "bag"
+
+  grout:
+    label: "Затирка"
+    unit: "kg"
+    consumption_per_m2: 0.5
+    package_size: 2
+    package_unit: "pack"

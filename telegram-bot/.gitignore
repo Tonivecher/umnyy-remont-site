@@ -1,0 +1,11 @@
+venv/
+.venv/
+__pycache__/
+.env
+google_credentials.json
+*.pyc
+rag_index/rag.sqlite
+rag_data/_registry.json
+rag_data/**/*.pdf
+data/*.sqlite
+bot_runtime.log
