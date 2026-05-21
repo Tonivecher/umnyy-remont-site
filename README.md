@@ -1,20 +1,72 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Умный Ремонт
 
-# Run and deploy your AI Studio app
+Премиальный сайт и Telegram Mini App для сервиса ремонта квартир под ключ в Москве.
 
-This contains everything you need to run your app locally.
+[![React](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)](https://vite.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-View your app in AI Studio: https://ai.studio/apps/a88a47d1-8aa8-456e-a618-8231998d2a56
+## Что внутри
 
-## Run Locally
+- Основной сайт на React, TypeScript, Vite и Tailwind CSS.
+- Премиальная hero-секция, портфолио, отзывы и контактные сценарии.
+- Быстрые CTA в MAX, WhatsApp и Telegram.
+- Express API для отзывов и локального хранения.
+- Telegram-бот и Mini App для предварительного расчета ремонта.
 
-**Prerequisites:**  Node.js
+## Стек
 
+| Слой | Технологии |
+| --- | --- |
+| Frontend | React 19, Vite 6, TypeScript, Tailwind CSS 4 |
+| Motion | GSAP, Framer Motion, Lenis |
+| Backend сайта | Express, better-sqlite3 |
+| Telegram | aiogram, aiohttp, SQLAlchemy |
+| Integrations | Google Sheets, Telegram Mini App |
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Быстрый старт
+
+```bash
+npm install
+npm run dev
+```
+
+Локально сайт откроется на [http://localhost:3000](http://localhost:3000), API-сервер на `3001`.
+
+## Проверки
+
+```bash
+npm run lint
+npm run build
+python3 telegram-bot/scripts/test_miniapp_design.py
+```
+
+Для тестов Telegram-бота используйте Python 3.12:
+
+```bash
+python3.12 -m venv /tmp/umniy-remont-venv
+/tmp/umniy-remont-venv/bin/python -m pip install -r telegram-bot/requirements.txt
+GOOGLE_CREDENTIALS='{}' /tmp/umniy-remont-venv/bin/python telegram-bot/scripts/test_telegram_sales_flow.py
+```
+
+## Структура
+
+```text
+src/
+  components/        Основные секции сайта
+  utils/             Общие ссылки и утилиты
+server/              Express API и локальная база
+public/              Брендовые ассеты и изображения
+telegram-bot/        Telegram-бот, Mini App и расчеты
+```
+
+## Telegram Mini App
+
+Mini App живет в `telegram-bot/miniapp/static`. Подробная инструкция по запуску бота и настройке окружения находится в [telegram-bot/README.md](telegram-bot/README.md).
+
+## Деплой
+
+Репозиторий не привязан к Netlify. Netlify workflow, webhook и repository secrets отключены/удалены.
+
+Текущий production-деплой должен настраиваться через выбранную платформу отдельно от репозитория.
