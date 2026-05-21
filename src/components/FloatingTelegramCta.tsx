@@ -7,7 +7,7 @@ export const FloatingTelegramCta: React.FC = () => {
       tone="dark"
       layout="dock"
       showLabels={false}
-      className="fixed bottom-4 right-4 z-40 md:bottom-8 md:right-8"
+      className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 md:bottom-8 md:left-auto md:right-8 md:translate-x-0"
     />
   );
 };

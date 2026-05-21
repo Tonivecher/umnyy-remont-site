@@ -13,7 +13,7 @@ class MiniAppDesignTest(unittest.TestCase):
         css = STYLES.read_text(encoding="utf-8")
 
         self.assertIn("brand-mark", html)
-        self.assertIn("/miniapp/static/brand/logo-current.svg", html)
+        self.assertIn("/miniapp/static/assets/umniremont-logo-white.svg", html)
         self.assertIn("/miniapp/static/brand/favicon.svg", html)
         self.assertIn("film-grain", html)
         self.assertIn("hero-cta-row", html)

@@ -47,6 +47,8 @@ const messengers = [
     href: messengerLinks.max,
     ariaLabel: 'Написать через MAX',
     icon: MaxIcon,
+    brandClass:
+      'border-transparent bg-[radial-gradient(136%_141%_at_100%_100%,#8d28c8_0%,#7c42fa_20%,#007aff_80%,#609ceb_100%)] text-white shadow-[0_14px_36px_rgba(0,122,255,0.32)] hover:brightness-110',
   },
   {
     id: 'whatsapp',
@@ -54,6 +56,8 @@ const messengers = [
     href: messengerLinks.whatsapp,
     ariaLabel: 'Написать в WhatsApp',
     icon: WhatsAppIcon,
+    brandClass:
+      'border-transparent bg-[#25D366] text-white shadow-[0_14px_36px_rgba(37,211,102,0.28)] hover:bg-[#1ebe5d]',
   },
   {
     id: 'telegram',
@@ -61,6 +65,8 @@ const messengers = [
     href: messengerLinks.telegram,
     ariaLabel: 'Написать в Telegram',
     icon: TelegramIcon,
+    brandClass:
+      'border-transparent bg-[#27A7E7] text-white shadow-[0_14px_36px_rgba(39,167,231,0.3)] hover:bg-[#229ed9]',
   },
 ];
 
@@ -82,26 +88,25 @@ export const MessengerLinks: React.FC<MessengerLinksProps> = ({
       )}
       aria-label="Связаться в мессенджере"
     >
-      {messengers.map(({ id, label, href, ariaLabel, icon: Icon }) => (
+      {messengers.map(({ id, label, href, ariaLabel, icon: Icon, brandClass }) => (
         <a
           key={id}
           href={href}
           target="_blank"
           rel="noreferrer"
           className={cn(
-            'premium-action group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.16em]',
+            'premium-action group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.16em] transition-[filter,transform,box-shadow,background-color] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80',
             layout === 'stack' ? 'w-full px-5 py-4' : 'h-12 px-4',
             layout === 'dock' && 'h-11 w-11 px-0',
-            isLight
-              ? 'border border-brand-dark/15 text-brand-dark hover:border-brand-dark hover:bg-brand-dark hover:text-white'
-              : 'border border-white/35 bg-black/20 text-white hover:border-brand-accent hover:bg-black/35 hover:text-brand-accent',
+            brandClass,
+            isLight ? 'ring-1 ring-black/5' : 'ring-1 ring-white/10',
           )}
           aria-label={ariaLabel}
         >
           <Icon
             className={cn(
               layout === 'dock' ? 'h-5 w-5' : 'h-[18px] w-[18px]',
-              id === 'max' && 'text-brand-accent',
+              'text-white',
             )}
           />
           {showLabels && layout !== 'dock' ? <span>{label}</span> : null}

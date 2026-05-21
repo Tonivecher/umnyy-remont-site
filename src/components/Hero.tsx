@@ -83,6 +83,10 @@ export const Hero: React.FC = () => {
         <h1
           data-split-heading
           className="hero-brand-title mx-auto mb-6 max-w-[11ch] text-[3.6rem] leading-[0.96] sm:max-w-none sm:text-7xl md:max-w-[13ch] md:text-[clamp(5.5rem,8.8vw,8.75rem)] md:leading-[0.94]"
+          style={{
+            fontFamily: '"Nunito", "Manrope", ui-sans-serif, system-ui, sans-serif',
+            letterSpacing: '0.018em',
+          }}
         >
           Умный Ремонт
         </h1>
@@ -94,7 +98,7 @@ export const Hero: React.FC = () => {
             href={telegramLinks.estimateHero}
             target="_blank"
             rel="noreferrer"
-            className="premium-action group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-brand-accent px-6 py-4 text-[10px] font-semibold uppercase text-brand-dark hover:text-white sm:px-8 sm:py-5"
+            className="premium-action group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-[#d2ad61] px-6 py-4 text-[10px] font-semibold uppercase text-brand-dark shadow-[0_16px_36px_rgba(0,0,0,0.28)] hover:text-white sm:px-8 sm:py-5"
           >
             <span className="mobile-action-text relative z-10 md:tracking-[0.28em]">Рассчитать ремонт</span>
             <span className="absolute inset-0 translate-y-full bg-brand-dark transition-transform duration-500 group-hover:translate-y-0" />
@@ -103,7 +107,7 @@ export const Hero: React.FC = () => {
             href={telegramLinks.channel}
             target="_blank"
             rel="noreferrer"
-            className="premium-action hero-support-text inline-flex items-center justify-center border border-white/45 bg-black/20 px-6 py-4 text-[10px] uppercase text-white hover:border-white hover:bg-black/30 sm:px-8 sm:py-5"
+            className="premium-action hero-support-text inline-flex items-center justify-center border border-white/55 bg-black/50 px-6 py-4 text-[10px] uppercase text-white shadow-[0_16px_36px_rgba(0,0,0,0.22)] hover:border-white hover:bg-black/65 sm:px-8 sm:py-5"
           >
             <span className="mobile-action-text md:tracking-[0.28em]">Канал с советами</span>
           </a>
