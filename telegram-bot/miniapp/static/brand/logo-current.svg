@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
-  <title id="title">Умный Ремонт — монограмма УР</title>
-  <desc id="desc">Золотая линейная монограмма УР на графитовом фоне, адаптированная по выбранному референсу.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 210" role="img" aria-labelledby="title desc">
+  <title id="title">Умный Ремонт</title>
+  <desc id="desc">Логотип Умный Ремонт: золотая монограмма УР и текстовый знак на графитовой подложке.</desc>
 
   <defs>
     <linearGradient id="goldStroke" x1="40" y1="30" x2="210" y2="215" gradientUnits="userSpaceOnUse">
@@ -12,10 +12,10 @@
       <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.34"/>
     </filter>
   </defs>
-  <rect width="256" height="256" rx="58" fill="#070707"/>
-  <rect x="7" y="7" width="242" height="242" rx="51" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
-  <circle cx="190" cy="58" r="112" fill="#c5a059" opacity="0.08"/>
-  <g filter="url(#softShadow)">
+  <rect width="760" height="210" rx="44" fill="#070707"/>
+  <rect x="6" y="6" width="748" height="198" rx="38" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
+  <circle cx="140" cy="38" r="148" fill="#c5a059" opacity="0.08"/>
+  <g transform="translate(27 5) scale(.78)" filter="url(#softShadow)">
   <g id="ur-monogram" fill="none" stroke="url(#goldStroke)" stroke-width="12" stroke-linejoin="miter" stroke-linecap="square">
     <path d="M63 42 L101 126"/>
     <path d="M139 42 L94 141 C83 165 61 178 37 169 L45 145 C58 151 71 146 78 131"/>
@@ -32,4 +32,7 @@
     <path d="M100 84 V206"/>
     <path d="M139 42 H163 L151 68"/>
   </g></g>
+  <text x="248" y="100" fill="#f5f1e8" font-family="Inter, Avenir Next, Montserrat, Arial, sans-serif" font-size="45" font-weight="500" letter-spacing="7">УМНЫЙ</text>
+  <text x="248" y="154" fill="#f5f1e8" font-family="Inter, Avenir Next, Montserrat, Arial, sans-serif" font-size="45" font-weight="500" letter-spacing="7">РЕМОНТ</text>
+  <path d="M247 177 H620" stroke="#d6b36a" stroke-width="2" stroke-linecap="round" opacity="0.62"/>
 </svg>

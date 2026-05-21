@@ -20,6 +20,13 @@ class TelegramSalesFlowTest(unittest.TestCase):
         self.assertEqual(config.PUBLIC_SITE_URL, "https://umniremont.pro")
         self.assertNotIn("smartrepair", config.MINI_APP_URL.lower())
 
+    def test_budget_callback_preserves_client_identity_and_does_not_block_on_admin_notify(self):
+        main_py = (ROOT / "main.py").read_text(encoding="utf-8")
+        self.assertIn("lead_user: Any | None = None", main_py)
+        self.assertIn("user = lead_user or message.from_user", main_py)
+        self.assertIn("complete_lead(callback.message, state, lead_user=callback.from_user)", main_py)
+        self.assertIn("admin_notify_failed", main_py)
+
     def test_google_sheets_row_keeps_legacy_columns_and_adds_attribution(self):
         rows = []
 

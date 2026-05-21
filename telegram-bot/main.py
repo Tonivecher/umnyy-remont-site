@@ -763,7 +763,7 @@ async def main():
         await message.answer("Продолжаем сохраненный расчет сметы.")
         await prompt_estimate_step(message, payload)
 
-    async def complete_lead(message: Message, state: FSMContext):
+    async def complete_lead(message: Message, state: FSMContext, lead_user: Any | None = None):
         current_state = await state.get_state()
         debug_log(
             "complete_lead",
@@ -773,7 +773,10 @@ async def main():
         data = await state.get_data()
         lead_source = normalize_lead_source(str(data.get("source") or "telegram"))
         data["source"] = lead_source
-        user = message.from_user
+
+        # Для inline-кнопок message.from_user — это сам бот, а реальный клиент лежит
+        # в callback.from_user. Поэтому пользователь передается явно из callback-хендлера.
+        user = lead_user or message.from_user
         data["telegram_user_id"] = str(user.id) if user else ""
         data["telegram_username"] = f"@{user.username}" if user and user.username else ""
         data["telegram_full_name"] = user.full_name if user else ""
@@ -785,7 +788,9 @@ async def main():
             print(f"[FSM_ERROR] add_lead failed chat_id={message.chat.id} error={exc!r}")
             print(traceback.format_exc())
 
-        # Отправка админу
+        # Отправка админу не должна ломать клиентский сценарий: если ADMIN_ID
+        # недоступен или Telegram вернул ошибку, пользователь всё равно должен
+        # получить финальное сообщение, а состояние — очиститься.
         text = (
             "Новая заявка:\n\n"
             f"Имя: {data['name']}\n"
@@ -797,7 +802,12 @@ async def main():
             f"Telegram: {data.get('telegram_username') or data.get('telegram_full_name') or data.get('telegram_user_id') or '-'}"
         )
 
-        await bot.send_message(ADMIN_ID, text)
+        try:
+            await bot.send_message(ADMIN_ID, text)
+        except Exception as exc:
+            print(f"[FSM_ERROR] admin_notify_failed chat_id={message.chat.id} admin_id={ADMIN_ID} error={exc!r}")
+            print(traceback.format_exc())
+
         await message.answer(
             "Спасибо. Заявка уже у нас — скоро свяжемся с вами.\n\n"
             f"А пока можно заглянуть в канал: {TELEGRAM_CHANNEL_URL}"
@@ -1777,9 +1787,11 @@ async def main():
             return
 
         await state.update_data(budget=budget_value)
-        await callback.message.edit_reply_markup()
+        if callback.message:
+            await callback.message.edit_reply_markup()
         await callback.answer()
-        await complete_lead(callback.message, state)
+        if callback.message:
+            await complete_lead(callback.message, state, lead_user=callback.from_user)
 
     @dp.message(MeasureForm.custom_budget)
     async def get_custom_budget(message: Message, state: FSMContext):

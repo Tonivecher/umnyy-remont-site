@@ -54,7 +54,7 @@ export const Hero: React.FC = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden"
     >
       {/* Background Image */}
       <div 
@@ -74,8 +74,15 @@ export const Hero: React.FC = () => {
       {/* Hero Content */}
       <div 
         ref={contentRef}
-        className="relative z-10 text-center px-4"
+        className="relative z-10 px-4 text-center"
       >
+        <img
+          data-hero-fade
+          src="/brand/logo-current-icon.svg"
+          alt=""
+          aria-hidden="true"
+          className="mx-auto mb-8 h-24 w-24 rounded-[28px] shadow-[0_18px_70px_rgba(0,0,0,0.58)] ring-1 ring-brand-accent/25 md:h-28 md:w-28"
+        />
         <h1
           data-split-heading
           className="text-7xl md:text-[12vw] font-display leading-none mb-6 tracking-tighter"
