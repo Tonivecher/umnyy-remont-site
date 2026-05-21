@@ -47,9 +47,9 @@ export const Navbar: React.FC = () => {
 
         <a href="#" className="relative block shrink-0" onClick={closeMenu}>
           <img
-            src="/brand/umniremont-logo-white.svg"
+            src="/brand/logo-current.svg"
             alt="Умный Ремонт"
-            className="h-8 w-auto origin-left scale-[1.45] transform-gpu md:h-12 md:scale-[1.35]"
+            className="h-10 w-auto rounded-[18px] shadow-[0_12px_36px_rgba(0,0,0,0.5)] ring-1 ring-brand-accent/30 md:h-12"
           />
         </a>
 
@@ -99,22 +99,12 @@ export const Navbar: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] bg-brand-dark flex flex-col justify-center items-center md:hidden"
+            className="fixed inset-0 z-40 bg-brand-dark flex flex-col justify-center items-center md:hidden"
             initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
             animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
             exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <button
-              type="button"
-              className="absolute right-8 top-4 flex h-8 w-8 flex-col justify-center gap-[6px]"
-              aria-label="Закрыть меню"
-              onClick={closeMenu}
-            >
-              <span className="block h-px w-full rotate-45 translate-y-[3.5px] bg-white origin-center" />
-              <span className="block h-px w-full -rotate-45 -translate-y-[3.5px] bg-white origin-center" />
-            </button>
-
             <nav className="flex flex-col items-center gap-10">
               {navLinks.map((link, i) => (
                 <motion.a

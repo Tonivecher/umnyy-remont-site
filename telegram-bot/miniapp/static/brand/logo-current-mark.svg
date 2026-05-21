@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
-  <title id="title">Умный Ремонт — монограмма УР</title>
-  <desc id="desc">Золотая линейная монограмма УР на графитовом фоне, адаптированная по выбранному референсу.</desc>
+  <title id="title">Монограмма УР</title>
+  <desc id="desc">Прозрачная золотая монограмма УР для использования на тёмных и светлых носителях.</desc>
 
   <defs>
     <linearGradient id="goldStroke" x1="40" y1="30" x2="210" y2="215" gradientUnits="userSpaceOnUse">
@@ -12,9 +12,6 @@
       <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.34"/>
     </filter>
   </defs>
-  <rect width="256" height="256" rx="58" fill="#070707"/>
-  <rect x="7" y="7" width="242" height="242" rx="51" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
-  <circle cx="190" cy="58" r="112" fill="#c5a059" opacity="0.08"/>
   <g filter="url(#softShadow)">
   <g id="ur-monogram" fill="none" stroke="url(#goldStroke)" stroke-width="12" stroke-linejoin="miter" stroke-linecap="square">
     <path d="M63 42 L101 126"/>
