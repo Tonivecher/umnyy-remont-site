@@ -102,9 +102,14 @@
     };
   }
 
+  const FAVORITE_TIER_KEY = "umniy_remont_favorite_tier";
+  const LEGACY_FAVORITE_TIER_KEY = "umid_favorite_tier";
+  const LOCAL_DRAFT_KEY = "umniy_remont_local_draft";
+  const LEGACY_LOCAL_DRAFT_KEY = "umid_local_draft";
+
   function getStoredFavoriteTier() {
     try {
-      const raw = window.localStorage.getItem("umid_favorite_tier") || "standard";
+      const raw = window.localStorage.getItem(FAVORITE_TIER_KEY) || window.localStorage.getItem(LEGACY_FAVORITE_TIER_KEY) || "standard";
       return ["econom", "standard", "premium"].includes(raw) ? raw : "standard";
     } catch (error) {
       return "standard";
@@ -113,7 +118,7 @@
 
   function saveFavoriteTier(tier) {
     try {
-      window.localStorage.setItem("umid_favorite_tier", tier);
+      window.localStorage.setItem(FAVORITE_TIER_KEY, tier);
     } catch (error) {
       return;
     }
@@ -121,7 +126,7 @@
 
   function loadLocalDraft() {
     try {
-      const raw = window.localStorage.getItem("umid_local_draft");
+      const raw = window.localStorage.getItem(LOCAL_DRAFT_KEY) || window.localStorage.getItem(LEGACY_LOCAL_DRAFT_KEY);
       if (!raw) {
         return null;
       }
@@ -134,7 +139,7 @@
 
   function saveLocalDraft(payload) {
     try {
-      window.localStorage.setItem("umid_local_draft", JSON.stringify(payload));
+      window.localStorage.setItem(LOCAL_DRAFT_KEY, JSON.stringify(payload));
     } catch (error) {
       return;
     }
@@ -142,7 +147,8 @@
 
   function clearLocalDraft() {
     try {
-      window.localStorage.removeItem("umid_local_draft");
+      window.localStorage.removeItem(LOCAL_DRAFT_KEY);
+      window.localStorage.removeItem(LEGACY_LOCAL_DRAFT_KEY);
     } catch (error) {
       return;
     }
@@ -200,6 +206,7 @@
     resetSessionBtn: document.getElementById("resetSessionBtn"),
     copyReportBtn: document.getElementById("copyReportBtn"),
     downloadJsonBtn: document.getElementById("downloadJsonBtn"),
+    sendLeadBtn: document.getElementById("sendLeadBtn"),
     resultCard: document.getElementById("resultCard"),
     laborCards: document.getElementById("laborCards"),
     scenarioCards: document.getElementById("scenarioCards"),
@@ -940,7 +947,7 @@
       .concat(summary.room_assumptions || []);
 
     const lines = [
-      "Предварительная смета (Mini App)",
+      "Предварительная смета — Умный Ремонт",
       `Город: ${summary.city || "Москва"}`,
       `Комнат: ${summary.rooms_count || 0}`,
       "",
@@ -1020,7 +1027,7 @@
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "umid-estimate-summary.json";
+    link.download = "umniy-remont-estimate-summary.json";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -1042,7 +1049,7 @@
 
     try {
       state.busy = true;
-      showSpinner("Формируем архитектурную смету...");
+      showSpinner("Формируем предварительный расчёт...");
       const data = await apiPost("/miniapp/api/calculate", {
         initData: state.initData,
         payload: state.payload
@@ -1057,7 +1064,7 @@
       state.payload.status = "finished";
       updateCabinet();
       setStatus("Смета рассчитана.", "ok");
-      showToast("Архитектурная смета успешно рассчитана!", "success");
+      showToast("Предварительный расчёт готов!", "success");
     } catch (error) {
       setStatus(`Ошибка расчета: ${error.message}`, "error");
       showToast(`Ошибка расчета: ${error.message}`, "error");
@@ -1065,6 +1072,15 @@
       state.busy = false;
       hideSpinner();
     }
+  }
+
+  function sendLeadToBot() {
+    const url = "https://t.me/umniyremontbot?start=measure_miniapp_result";
+    if (state.tg && typeof state.tg.openTelegramLink === "function") {
+      state.tg.openTelegramLink(url);
+      return;
+    }
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   function scheduleAutosave() {
@@ -1161,6 +1177,10 @@
     els.downloadJsonBtn.addEventListener("click", () => {
       downloadSummaryJson();
     });
+
+    if (els.sendLeadBtn) {
+      els.sendLeadBtn.addEventListener("click", sendLeadToBot);
+    }
 
     [els.cityInput, els.ceilingInput].forEach((input) => {
       input.addEventListener("input", () => {

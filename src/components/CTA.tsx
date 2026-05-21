@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { MagneticButton } from './MagneticButton';
+import { telegramLinks } from '../utils/telegramLinks';
 
-// Replace these placeholders with the live WhatsApp/Telegram contacts.
 const contactLinks = {
   phoneHref: 'tel:+79991234567',
   phoneLabel: '+7 (999) 123-45-67',
   whatsappHref: 'https://wa.me/79990000000',
-  telegramHref: 'https://t.me/your_telegram',
+  telegramHref: telegramLinks.measureContact,
 };
 
 export const CTA: React.FC = () => {
@@ -35,9 +35,9 @@ export const CTA: React.FC = () => {
       className="py-32 md:py-64 px-8 md:px-24 bg-brand-light text-brand-dark overflow-hidden"
     >
       <div className="cta-content text-center max-w-4xl mx-auto">
-        <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Начните свой путь</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">Начните с понятного расчёта</span>
         <h2 data-split-heading className="text-5xl md:text-8xl font-display mb-16 leading-none">
-          Давайте реализуем ваше видение вместе.
+          Прикинем бюджет ремонта без давления и строительного тумана.
         </h2>
         
         <div className="flex flex-col gap-6 justify-center items-center">
@@ -63,7 +63,7 @@ export const CTA: React.FC = () => {
                 className="inline-flex items-center justify-center py-6 px-12 border border-brand-dark/15 text-[10px] uppercase tracking-[0.3em] hover:border-brand-dark transition-colors"
                 aria-label="Написать в Telegram"
               >
-                Telegram
+                Рассчитать в Telegram
               </a>
             </MagneticButton>
           </div>

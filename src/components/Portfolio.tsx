@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MagneticButton } from './MagneticButton';
+import { telegramLinks } from '../utils/telegramLinks';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,7 +22,7 @@ type Project = {
   gallery: ProjectImage[];
 };
 
-const portfolioLeadHref = 'https://t.me/umniyremontbot?start=measure_site_works';
+const portfolioLeadHref = telegramLinks.estimatePortfolio;
 
 const projects: Project[] = [
   {

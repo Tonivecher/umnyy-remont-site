@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { motion, AnimatePresence } from 'framer-motion';
+import { telegramLinks } from '../utils/telegramLinks';
 
 const navLinks = [
   { href: '#portfolio', label: 'Работы' },
@@ -53,12 +54,20 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Desktop links */}
-        <div className="hidden md:flex gap-12 text-[10px] uppercase tracking-[0.3em] font-medium relative">
+        <div className="hidden md:flex gap-10 text-[10px] uppercase tracking-[0.3em] font-medium relative items-center">
           {navLinks.map((link) => (
             <a key={link.href} href={link.href} className="nav-readable-link transition-opacity">
               {link.label}
             </a>
           ))}
+          <a
+            href={telegramLinks.estimateNav}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-white/25 px-5 py-3 text-white transition hover:border-brand-accent hover:text-brand-accent"
+          >
+            Расчёт
+          </a>
         </div>
 
         {/* Mobile burger */}
@@ -112,6 +121,20 @@ export const Navbar: React.FC = () => {
                 </motion.a>
               ))}
             </nav>
+
+            <motion.a
+              href={telegramLinks.estimateMobile}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-12 rounded-full border border-brand-accent px-7 py-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-accent"
+              onClick={closeMenu}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ delay: 0.36, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+              Рассчитать ремонт
+            </motion.a>
 
             <motion.div
               className="absolute bottom-12 text-[9px] uppercase tracking-[0.3em] opacity-30 text-white"

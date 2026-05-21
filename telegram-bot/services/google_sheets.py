@@ -51,12 +51,17 @@ def add_lead(data):
     try:
         _sheet.append_row([
             datetime.now().strftime("%Y-%m-%d %H:%M"),
-            data["name"],
-            data["phone"],
-            data["address"],
-            data["area"],
-            data["budget"],
+            data.get("name", ""),
+            data.get("phone", ""),
+            data.get("address", ""),
+            data.get("area", ""),
+            data.get("budget", ""),
             data.get("source", "telegram"),
+            data.get("telegram_username", ""),
+            data.get("telegram_user_id", ""),
+            data.get("telegram_full_name", ""),
+            data.get("preferred_tier", ""),
+            data.get("estimate_summary", ""),
         ])
     except Exception as exc:
         print(f"[GOOGLE_SHEETS] Error appending row to Google Sheets: {exc!r}")

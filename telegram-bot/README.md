@@ -1,7 +1,7 @@
-# Telegram-бот UMID
+# Telegram-бот «Умный Ремонт»
 
 Бот для сбора заявок (имя, телефон, адрес, площадь, бюджет) и записи в Google Таблицу `Leads`.
-Расчет сметы теперь открывает внешний SmartRepair Telegram Mini App, плюс остается чатовый fallback-сценарий.
+Расчёт ремонта открывает Telegram Mini App «Умного Ремонта», плюс остаётся чатовый fallback-сценарий.
 
 ## Требования
 
@@ -37,7 +37,7 @@ cp .env.example .env
 
 Для Telegram Mini App:
 
-- `MINI_APP_URL` (по умолчанию `https://smartrepair-telegram-miniapp.vercel.app`)
+- `MINI_APP_URL` (по умолчанию `http://localhost:8080/miniapp`; в продакшне укажите публичный HTTPS URL mini app)
 - `MINI_APP_HOST` (по умолчанию `0.0.0.0`)
 - `MINI_APP_PORT` (по умолчанию `PORT` или `8080`)
 - `ENABLE_MINI_APP_SERVER` (`1`/`0`, по умолчанию `0`, нужен только для legacy встроенного mini app)
@@ -184,7 +184,7 @@ python scripts/estimate_selftest.py
 ## Проверка estimate UI (smoke)
 
 1. Запустите бота: `python main.py`
-2. В Telegram нажмите кнопку `Рассчитать смету` (или отправьте `/estimate`)
+2. В Telegram нажмите кнопку `Рассчитать ремонт` (или отправьте `/estimate`)
 3. Заполните глобальные поля:
    - город/регион (или `-` для `Москва`)
    - высота потолка (или `-` для `2.7`)
@@ -198,8 +198,8 @@ python scripts/estimate_selftest.py
    - количество электроточек
    - количество сантехточек (для кухни/санузла)
 5. Проверьте редактирование/удаление:
-   - `/estimate_edit_room` (выбрать комнату -> выбрать поле -> ввести новое значение)
-   - `/estimate_remove_room` (выбрать комнату -> удалить)
+   - `/estimate_edit_room` (выбрать комнату → выбрать поле → ввести новое значение)
+   - `/estimate_remove_room` (выбрать комнату → удалить)
 6. После сообщения `Комната добавлена` нажмите `Завершить смету` (или `/estimate_finish`)
 7. Проверьте, что итог содержит разделы `Материалы`, `Работы` и `Допущения`.
 8. Перезапустите бота и убедитесь, что `/estimate` подхватывает сохраненную сессию.
@@ -210,12 +210,12 @@ python scripts/estimate_selftest.py
 python scripts/bot_dry_run.py
 ```
 
-## SmartRepair Telegram Mini App
+## Telegram Mini App «Умный Ремонт»
 
 Что реализовано:
 
-- внешний SmartRepair Telegram Mini App как основной сценарий запуска из бота
-- menu button бота настроен на SmartRepair Mini App
+- mini app «Умный Ремонт» как основной сценарий запуска из бота
+- menu button бота настроен на mini app «Умный Ремонт»
 - production-запуск бота через webhook, чтобы не зависеть от конфликтующих `getUpdates`
 - валидация Telegram `initData` на backend (HMAC)
 - сохранение/загрузка сессии сметы в `estimate_sessions`
@@ -225,14 +225,14 @@ python scripts/bot_dry_run.py
 - действия для комнат: редактирование, удаление, дублирование
 - сценарии бюджета (`Standard`, `+10%`, `+15%`, `дельта Premium`)
 - экспорт результата: копирование отчета и скачивание JSON
-- кнопка `Рассчитать смету` в главном меню как WebApp-кнопка
-- встроенный mini app сервер UMID остается только как legacy fallback при `ENABLE_MINI_APP_SERVER=1`
+- кнопка `Рассчитать ремонт` в главном меню как WebApp-кнопка
+- встроенный mini app сервер остаётся как fallback/локальный режим при `ENABLE_MINI_APP_SERVER=1`
 
 Как проверить вручную:
 
-1. Убедитесь, что `MINI_APP_URL` указывает на `https://smartrepair-telegram-miniapp.vercel.app`.
-2. Откройте чат с ботом -> нажмите `Рассчитать смету`.
-3. В mini app заполните объект и комнаты, нажмите `Рассчитать смету`.
+1. Убедитесь, что `MINI_APP_URL` указывает на публичный HTTPS URL mini app.
+2. Откройте чат с ботом → нажмите `Рассчитать ремонт`.
+3. В mini app заполните объект и комнаты, нажмите `Рассчитать ремонт`.
 4. Убедитесь, что выводятся:
    - материалы (количество + округление по упаковкам)
    - работы по тарифам `econom/standard/premium`
@@ -280,8 +280,8 @@ Fallback:
 | `RAG_DB_PATH` | Путь к SQLite индексу (по умолчанию `rag_index/rag.sqlite`) |
 | `DATABASE_URL` | URL PostgreSQL (если задан, используется вместо SQLite) |
 | `SQLITE_PATH` | Путь к локальному SQLite для app DB (по умолчанию `data/app.sqlite`) |
-| `MINI_APP_URL` | Публичный URL SmartRepair Mini App (по умолчанию `https://smartrepair-telegram-miniapp.vercel.app`) |
-| `MINI_APP_HOST` | Хост legacy встроенного mini app сервера (по умолчанию `0.0.0.0`) |
+| `MINI_APP_URL` | Публичный URL Telegram Mini App (локально `http://localhost:8080/miniapp`; в продакшне нужен HTTPS URL) |
+| `MINI_APP_HOST` | Хост встроенного mini app сервера (по умолчанию `0.0.0.0`) |
 | `MINI_APP_PORT` | Порт legacy встроенного mini app сервера (по умолчанию `PORT` или `8080`) |
 | `ENABLE_MINI_APP_SERVER` | Включить legacy встроенный mini app HTTP-сервер (`1`/`0`, по умолчанию `0`) |
 | `BOT_TRANSPORT` | Транспорт получения апдейтов: `auto`, `polling`, `webhook` |
@@ -290,49 +290,67 @@ Fallback:
 | `MINI_APP_AUTH_MAX_AGE_SECONDS` | Максимальный возраст `initData` (секунды) |
 | `MINI_APP_DEV_USER_ID` | Dev-only user ID для локального теста mini app без Telegram |
 
-## Railway: Postgres + DB init
+## Timeweb Cloud: почему бот может не отвечать и как запускать
 
-1. В Railway откройте ваш project и нажмите `New` -> `Database` -> `Add PostgreSQL`.
-2. Откройте сервис бота -> `Variables`.
-3. Добавьте переменную `DATABASE_URL`:
-   - либо вручную вставьте connection URL из Postgres сервиса,
-   - либо через reference на переменную Postgres (в UI Railway).
-4. Добавьте mini app переменные:
-   - `ENABLE_MINI_APP_SERVER=0`
-   - `MINI_APP_URL=https://smartrepair-telegram-miniapp.vercel.app`
-   - опционально `MINI_APP_AUTH_MAX_AGE_SECONDS=86400`
-5. Убедитесь, что `SQLITE_PATH` в Railway не обязателен (можно не задавать).
-6. Задеплойте сервис бота.
+Mini app может открываться как обычная web-страница, но Telegram-бот отвечает только когда где-то постоянно запущен процесс `python main.py` с реальным `TELEGRAM_TOKEN`. Если на Timeweb задеплоен только сайт, бот физически не получает сообщения из Telegram.
 
-При старте бот сам выполняет идемпотентный init схемы и пишет лог:
-- `[STARTUP][DB] backend=Postgres source=DATABASE_URL`
-- `[STARTUP][DB] Schema init completed (idempotent)`
-- `[STARTUP][MINIAPP] server=disabled`
-- `[STARTUP][MINIAPP] launch_url=https://smartrepair-telegram-miniapp.vercel.app`
-- `[STARTUP][MINIAPP] menu_button=web_app`
-- `[STARTUP][BOT] transport=webhook url=https://<bot-domain>/telegram/webhook`
+В репозитории добавлен `telegram-bot/Dockerfile`, чтобы бота можно было запустить отдельным сервисом/контейнером на Timeweb Cloud без смешивания с frontend-сайтом.
 
-Что нужно сделать в @BotFather:
+Рекомендуемый вариант для быстрого стабильного запуска:
 
-1. Обновить токен в Railway (`TELEGRAM_TOKEN`) после `regenerate token` при необходимости.
-2. Убедиться, что используется тот же бот, что и в деплое.
-3. Для надежной совместимости mini app задать домен бота командой `/setdomain`:
-   - укажите домен `smartrepair-telegram-miniapp.vercel.app`.
+1. Создать в Timeweb Cloud отдельное приложение/контейнер для директории `telegram-bot`.
+2. Использовать Dockerfile из этой директории.
+3. Добавить environment variables, не коммитя секреты в git:
+   - `TELEGRAM_TOKEN=<токен от @BotFather>`
+   - `ADMIN_ID=<ваш Telegram user id>`
+   - `GOOGLE_CREDENTIALS=<JSON сервисного аккаунта Google>`
+   - `BOT_TRANSPORT=polling`
+   - `ENABLE_MINI_APP_SERVER=1`, если mini app будет обслуживаться этим же контейнером
+   - `MINI_APP_URL=https://<публичный-домен>/miniapp`
+   - `MINI_APP_HOST=0.0.0.0`
+   - `MINI_APP_PORT=8080`
+   - `BOT_PUBLIC_URL=https://t.me/umniyremontbot`
+   - `TELEGRAM_CHANNEL_URL=https://t.me/proumniremont`
+   - `PUBLIC_SITE_URL=https://umniremont.pro`
+4. Убедиться, что порт контейнера `8080` опубликован, если через него отдаётся mini app.
+5. В логах старта должны появиться строки:
+   - `[STARTUP][DB] Schema init completed (idempotent)`
+   - `[STARTUP][MINIAPP] launch_url=...`
+   - `[STARTUP][MINIAPP] menu_button=web_app`
+   - `[STARTUP][BOT] transport=polling`
+   - `[STARTUP] Bot started in polling mode`
 
-One-off init в Railway (если нужен вручную):
+Если нужен webhook-режим вместо polling:
 
-1. Откройте bot service -> `Deployments`/`Shell` -> `Run command`.
-2. Выполните:
-   ```bash
-   python scripts/init_db.py
-   ```
-3. Ожидаемый результат:
-   - `[INIT_DB] Schema init completed (idempotent)`
+- задать `BOT_TRANSPORT=webhook`;
+- задать `WEBHOOK_BASE_URL=https://<bot-domain>`;
+- `WEBHOOK_PATH` оставить `/telegram/webhook` или изменить осознанно;
+- убедиться, что домен публичный HTTPS и Telegram может достучаться до контейнера.
+
+Что сделать в @BotFather для mini app:
+
+1. Убедиться, что токен относится именно к `@umniyremontbot`.
+2. Для совместимости mini app задать домен командой `/setdomain`:
+   - указать домен, где доступен mini app.
+
+One-off init базы, если нужен вручную:
+
+```bash
+python scripts/init_db.py
+```
+
+Локальная проверка перед деплоем:
+
+```bash
+python scripts/bot_dry_run.py
+python scripts/estimate_selftest.py
+python scripts/db_check.py
+```
 
 Локальный тест c Postgres:
 
 ```bash
-export DATABASE_URL='postgresql://user:pass@host:5432/dbname'
+export DATABASE_URL='postgresql://user:***@host:5432/dbname'
 python scripts/init_db.py
 python scripts/db_check.py
 ```

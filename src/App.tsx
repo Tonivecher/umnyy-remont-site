@@ -6,6 +6,7 @@ import { Quote } from './components/Quote';
 import { Testimonials } from './components/Testimonials';
 import { CTA } from './components/CTA';
 import { Footer } from './components/Footer';
+import { FloatingTelegramCta } from './components/FloatingTelegramCta';
 import { PremiumCursor } from './components/PremiumCursor';
 import { FilmGrain } from './components/FilmGrain';
 import { useEffect, useRef } from 'react';
@@ -114,6 +115,7 @@ export default function App() {
       <Testimonials />
       <CTA />
       <Footer />
+      <FloatingTelegramCta />
     </main>
   );
 }
