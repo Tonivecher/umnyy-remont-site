@@ -48,7 +48,7 @@ const messengers = [
     ariaLabel: 'Написать через MAX',
     icon: MaxIcon,
     brandClass:
-      'border-transparent bg-[radial-gradient(136%_141%_at_100%_100%,#8d28c8_0%,#7c42fa_20%,#007aff_80%,#609ceb_100%)] text-white shadow-[0_14px_36px_rgba(0,122,255,0.32)] hover:brightness-110',
+      'border-transparent bg-[radial-gradient(136%_141%_at_100%_100%,rgba(141,40,200,0.78)_0%,rgba(124,66,250,0.78)_20%,rgba(0,122,255,0.78)_80%,rgba(96,156,235,0.78)_100%)] text-white shadow-[0_14px_36px_rgba(0,122,255,0.22)] hover:brightness-110',
   },
   {
     id: 'whatsapp',
@@ -57,7 +57,7 @@ const messengers = [
     ariaLabel: 'Написать в WhatsApp',
     icon: WhatsAppIcon,
     brandClass:
-      'border-transparent bg-[#25D366] text-white shadow-[0_14px_36px_rgba(37,211,102,0.28)] hover:bg-[#1ebe5d]',
+      'border-transparent bg-[#25D366]/80 text-white shadow-[0_14px_36px_rgba(37,211,102,0.18)] hover:bg-[#25D366]/90',
   },
   {
     id: 'telegram',
@@ -66,7 +66,7 @@ const messengers = [
     ariaLabel: 'Написать в Telegram',
     icon: TelegramIcon,
     brandClass:
-      'border-transparent bg-[#27A7E7] text-white shadow-[0_14px_36px_rgba(39,167,231,0.3)] hover:bg-[#229ed9]',
+      'border-transparent bg-[#27A7E7]/80 text-white shadow-[0_14px_36px_rgba(39,167,231,0.2)] hover:bg-[#27A7E7]/90',
   },
 ];
 
@@ -83,7 +83,7 @@ export const MessengerLinks: React.FC<MessengerLinksProps> = ({
       className={cn(
         'flex max-w-full gap-2.5',
         layout === 'stack' ? 'w-full flex-col' : 'items-center justify-center',
-        layout === 'dock' && 'rounded-full border border-white/12 bg-brand-dark/85 p-2 shadow-2xl shadow-black/30 backdrop-blur-md',
+        layout === 'dock' && 'rounded-full border border-white/12 bg-brand-dark/70 p-2 shadow-2xl shadow-black/24 backdrop-blur-md',
         className,
       )}
       aria-label="Связаться в мессенджере"
