@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { motion, AnimatePresence } from 'framer-motion';
-import { telegramLinks } from '../utils/telegramLinks';
 
 const navLinks = [
   { href: '#portfolio', label: 'Работы' },
@@ -61,12 +60,10 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
           <a
-            href={telegramLinks.estimateNav}
-            target="_blank"
-            rel="noreferrer"
+            href="#contact"
             className="rounded-full border border-white/25 px-5 py-3 text-white transition hover:border-brand-accent hover:text-brand-accent"
           >
-            Расчёт
+            Связаться
           </a>
         </div>
 
@@ -123,9 +120,7 @@ export const Navbar: React.FC = () => {
             </nav>
 
             <motion.a
-              href={telegramLinks.estimateMobile}
-              target="_blank"
-              rel="noreferrer"
+              href="#contact"
               className="mt-12 rounded-full border border-brand-accent px-7 py-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-accent"
               onClick={closeMenu}
               initial={{ opacity: 0, y: 24 }}
@@ -133,7 +128,7 @@ export const Navbar: React.FC = () => {
               exit={{ opacity: 0, y: 16 }}
               transition={{ delay: 0.36, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             >
-              Рассчитать ремонт
+              Связаться
             </motion.a>
 
             <motion.div

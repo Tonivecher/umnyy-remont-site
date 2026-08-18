@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MagneticButton } from './MagneticButton';
-import { telegramLinks } from '../utils/telegramLinks';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,8 +20,6 @@ type Project = {
   highlights: string[];
   gallery: ProjectImage[];
 };
-
-const portfolioLeadHref = telegramLinks.estimatePortfolio;
 
 const projects: Project[] = [
   {
@@ -220,14 +217,12 @@ export const Portfolio: React.FC = () => {
 
           <MagneticButton>
             <a
-              href={portfolioLeadHref}
-              target="_blank"
-              rel="noreferrer"
+              href="#contact"
               className="premium-action group relative inline-flex w-full items-center justify-center overflow-hidden border border-white/20 px-8 py-5 text-[10px] uppercase text-white hover:border-white/40 sm:w-auto sm:px-10 sm:text-[11px]"
-              aria-label="Заказать проект в Telegram"
+              aria-label="Перейти к контактам для обсуждения проекта"
             >
               <span className="mobile-action-text relative z-10 transition-colors duration-500 group-hover:text-brand-dark md:tracking-[0.25em]">
-                Рассчитать проект
+                Обсудить проект
               </span>
               <div className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
             </a>

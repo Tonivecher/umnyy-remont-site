@@ -95,12 +95,10 @@ export const Hero: React.FC = () => {
         </p>
         <div data-hero-fade className="mx-auto mt-9 flex w-full max-w-[20rem] flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
           <a
-            href={telegramLinks.estimateHero}
-            target="_blank"
-            rel="noreferrer"
+            href="#contact"
             className="premium-action group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-[#d2ad61] px-6 py-4 text-[10px] font-semibold uppercase text-brand-dark shadow-[0_16px_36px_rgba(0,0,0,0.28)] hover:text-white sm:px-8 sm:py-5"
           >
-            <span className="mobile-action-text relative z-10 md:tracking-[0.28em]">Рассчитать ремонт</span>
+            <span className="mobile-action-text relative z-10 md:tracking-[0.28em]">Обсудить ремонт</span>
             <span className="absolute inset-0 translate-y-full bg-brand-dark transition-transform duration-500 group-hover:translate-y-0" />
           </a>
           <a

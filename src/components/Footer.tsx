@@ -23,11 +23,6 @@ export const Footer: React.FC = () => {
           <span className="text-[10px] uppercase tracking-[0.2em] mb-6 block opacity-40">Telegram</span>
           <ul className="flex flex-col gap-4 text-xs uppercase tracking-widest">
             <li>
-              <a href={telegramLinks.measureContact} target="_blank" rel="noreferrer" className="hover:opacity-50 transition-opacity">
-                Бот для расчёта и заявки
-              </a>
-            </li>
-            <li>
               <a href={telegramLinks.channel} target="_blank" rel="noreferrer" className="hover:opacity-50 transition-opacity">
                 Канал «Про умный ремонт»
               </a>
