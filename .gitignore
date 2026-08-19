@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+server/data/
 .output
 .vinxi
 .tanstack/**
@@ -30,7 +31,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Editor platform metadata
-.lovable/
-

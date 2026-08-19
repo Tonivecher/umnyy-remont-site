@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -21,36 +20,7 @@ import { initTremble } from "@/utils/tremble";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const title = "Ремонт квартир под ключ в Москве | Умный Ремонт";
-const description =
-  "Профессиональный ремонт квартир под ключ в Москве. Опытная бригада мастеров, качественная отделка интерьеров и контроль каждого этапа работы.";
-const ogImage =
-  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1920&auto=format&fit=crop";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://umniremont.pro" },
-      { property: "og:image", content: ogImage },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Умный Ремонт | Architectural Interior Realization" },
-      {
-        name: "twitter:description",
-        content: "Премиальный ремонт и архитектурная реализация интерьеров.",
-      },
-      { name: "twitter:image", content: ogImage },
-    ],
-    links: [{ rel: "canonical", href: "https://umniremont.pro" }],
-  }),
-  component: Index,
-});
-
-function Index() {
+export default function App() {
   const mainRef = useRef<HTMLElement>(null);
   const [enableAmbientFx, setEnableAmbientFx] = useState(false);
 
