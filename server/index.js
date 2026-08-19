@@ -18,6 +18,11 @@ import {
   updateLeadStatus,
   updateReviewStatus,
 } from "./db.js";
+import {
+  isLeadEmailConfigured,
+  sendLeadNotification,
+  verifyLeadEmailTransport,
+} from "./mail.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +30,7 @@ const app = express();
 const PORT = Number.parseInt(process.env.PORT || "3001", 10);
 
 app.disable("x-powered-by");
+app.set("trust proxy", 1);
 app.use(cors());
 app.use(express.json({ limit: "100kb" }));
 
@@ -182,7 +188,7 @@ app.get("/api/leads", authorizeAdmin, (req, res) => {
   });
 });
 
-app.post("/api/leads/submit", (req, res) => {
+app.post("/api/leads/submit", async (req, res) => {
   const payload = req.body;
   if (!payload || typeof payload !== "object") {
     return res.status(400).json({ success: false, error: "Некорректное тело запроса." });
@@ -192,11 +198,7 @@ app.post("/api/leads/submit", (req, res) => {
     return res.status(202).json({ success: true, message: "Заявка принята." });
   }
 
-  const ip =
-    String(req.headers["cf-connecting-ip"] || "") ||
-    String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() ||
-    req.ip ||
-    "unknown";
+  const ip = req.ip || req.socket.remoteAddress || "unknown";
   if (isRateLimited(ip)) {
     return res.status(429).json({
       success: false,
@@ -226,7 +228,7 @@ app.post("/api/leads/submit", (req, res) => {
   }
 
   const now = new Date().toISOString();
-  saveLead({
+  const lead = saveLead({
     id: randomUUID(),
     name,
     phone,
@@ -240,8 +242,21 @@ app.post("/api/leads/submit", (req, res) => {
     updatedAt: now,
   });
 
+  let emailSent = false;
+  try {
+    const delivery = await sendLeadNotification(lead);
+    emailSent = delivery.sent;
+    if (!delivery.sent) {
+      console.warn(`Lead ${lead.id} saved, but email delivery is not configured.`);
+    }
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    console.error(`Lead ${lead.id} saved, but email delivery failed: ${reason}`);
+  }
+
   return res.status(201).json({
     success: true,
+    emailSent,
     message: "Спасибо! Заявка принята — свяжемся с вами в ближайшее время.",
   });
 });
@@ -280,4 +295,16 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
+
+  if (!isLeadEmailConfigured) {
+    console.warn("Lead email notifications are disabled: SMTP credentials are not configured.");
+    return;
+  }
+
+  verifyLeadEmailTransport()
+    .then(() => console.log("Lead email transport is ready."))
+    .catch((error) => {
+      const reason = error instanceof Error ? error.message : String(error);
+      console.error(`Lead email transport verification failed: ${reason}`);
+    });
 });
