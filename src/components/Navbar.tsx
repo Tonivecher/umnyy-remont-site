@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { href: '#portfolio', label: 'Работы' },
-  { href: '#about', label: 'О нас' },
-  { href: '#testimonials', label: 'Отзывы' },
-  { href: '#contact', label: 'Контакты' },
+  { href: "#portfolio", label: "Работы" },
+  { href: "#about", label: "О нас" },
+  { href: "#testimonials", label: "Отзывы" },
+  { href: "#contact", label: "Контакты" },
 ];
 
 export const Navbar: React.FC = () => {
@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
         y: -100,
         opacity: 0,
         duration: 1.5,
-        ease: 'power4.out',
+        ease: "power4.out",
         delay: 0.5,
       });
     });
@@ -28,8 +28,10 @@ export const Navbar: React.FC = () => {
 
   // Lock body scroll when menu is open
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
@@ -61,7 +63,7 @@ export const Navbar: React.FC = () => {
           ))}
           <a
             href="#contact"
-            className="rounded-full border border-white/25 px-5 py-3 text-white transition hover:border-brand-accent hover:text-brand-accent"
+            className="premium-action btn-glass inline-flex min-h-11 items-center justify-center px-6 py-3 text-white hover:text-brand-accent"
           >
             Связаться
           </a>
@@ -69,24 +71,28 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile burger */}
         <button
-          className="relative md:hidden flex flex-col justify-center gap-[6px] w-8 h-8"
-          aria-label={isOpen ? 'Закрыть меню' : 'Открыть меню'}
+          className="relative -mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[6px] md:hidden"
+          aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
           aria-expanded={isOpen}
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <motion.span
-            className="block h-px bg-white origin-center"
-            animate={isOpen ? { rotate: 45, y: 7, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
+            className="block h-px w-7 bg-white origin-center"
+            animate={
+              isOpen ? { rotate: 45, y: 7, width: "100%" } : { rotate: 0, y: 0, width: "100%" }
+            }
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           />
           <motion.span
-            className="block h-px bg-white"
+            className="block h-px w-7 bg-white"
             animate={isOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
             transition={{ duration: 0.2 }}
           />
           <motion.span
-            className="block h-px bg-white origin-center"
-            animate={isOpen ? { rotate: -45, y: -7, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
+            className="block h-px w-7 bg-white origin-center"
+            animate={
+              isOpen ? { rotate: -45, y: -7, width: "100%" } : { rotate: 0, y: 0, width: "100%" }
+            }
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           />
         </button>
@@ -97,9 +103,9 @@ export const Navbar: React.FC = () => {
         {isOpen && (
           <motion.div
             className="fixed inset-0 z-40 bg-brand-dark flex flex-col justify-center items-center md:hidden"
-            initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
-            animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
-            exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <nav className="flex flex-col items-center gap-10">
@@ -121,7 +127,7 @@ export const Navbar: React.FC = () => {
 
             <motion.a
               href="#contact"
-              className="mt-12 rounded-full border border-brand-accent px-7 py-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-accent"
+              className="premium-action btn-glass mt-12 inline-flex items-center justify-center px-9 py-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-accent"
               onClick={closeMenu}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}

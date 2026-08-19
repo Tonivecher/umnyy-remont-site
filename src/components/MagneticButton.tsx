@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { cn } from '@/src/utils/cn';
+import React, { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { cn } from "@/utils/cn";
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({ children, classN
   useEffect(() => {
     const button = buttonRef.current;
     if (!button) return;
-    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
 
     const xTo = gsap.quickTo(button, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
     const yTo = gsap.quickTo(button, "y", { duration: 1, ease: "elastic.out(1, 0.3)" });
@@ -23,7 +23,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({ children, classN
       const { width, height, left, top } = button.getBoundingClientRect();
       const x = clientX - (left + width / 2);
       const y = clientY - (top + height / 2);
-      
+
       // Limit the movement
       xTo(x * 0.3);
       yTo(y * 0.3);

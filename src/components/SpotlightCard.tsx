@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
-import { cn } from '@/src/utils/cn';
+import React, { useState } from "react";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
+import { cn } from "@/utils/cn";
 
 type SpotlightCardProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ type SpotlightCardProps = React.HTMLAttributes<HTMLDivElement> & {
 export const SpotlightCard: React.FC<SpotlightCardProps> = ({
   children,
   className,
-  spotlightColor = 'rgba(197, 160, 89, 0.18)',
+  spotlightColor = "rgba(197, 160, 89, 0.18)",
   spotlightSize = 320,
   onMouseMove,
   onMouseLeave,
@@ -43,7 +43,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.035] backdrop-blur-[1px]',
+        "relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.035] backdrop-blur-[1px]",
         className,
       )}
     >
@@ -58,7 +58,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
         }}
         transition={{
           duration: 0.28,
-          ease: 'easeOut',
+          ease: "easeOut",
         }}
       />
 
@@ -73,7 +73,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
         }}
         transition={{
           duration: 0.24,
-          ease: 'easeOut',
+          ease: "easeOut",
         }}
       />
 

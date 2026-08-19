@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { telegramLinks } from '../utils/telegramLinks';
-import { MessengerLinks } from './MessengerLinks';
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { telegramLinks } from "../utils/telegramLinks";
+import { MessengerLinks } from "./MessengerLinks";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,43 +12,45 @@ export const Hero: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
-      const fadingElements = contentRef.current?.querySelectorAll('[data-hero-fade]') ?? [];
+      const fadingElements = contentRef.current?.querySelectorAll("[data-hero-fade]") ?? [];
 
       gsap.from(fadingElements, {
         y: isMobileViewport ? 28 : 100,
         opacity: 0,
         duration: prefersReducedMotion ? 0.01 : isMobileViewport ? 1 : 2,
         stagger: isMobileViewport ? 0.12 : 0.2,
-        ease: 'power4.out',
-        delay: isMobileViewport ? 0.35 : 0.8
+        ease: "power4.out",
+        delay: isMobileViewport ? 0.35 : 0.8,
       });
 
       if (isMobileViewport || prefersReducedMotion) return;
 
       gsap.to(bgRef.current, {
         yPercent: 30,
-        ease: 'none',
+        ease: "none",
         scrollTrigger: {
           trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true
-        }
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+        },
       });
 
       gsap.to(contentRef.current, {
         yPercent: -20,
-        ease: 'none',
+        ease: "none",
         scrollTrigger: {
           trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true
-        }
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+        },
       });
     });
 
@@ -56,62 +58,72 @@ export const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section 
+    <section
       ref={heroRef}
       className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden"
     >
       {/* Background Image */}
-      <div 
-        ref={bgRef}
-        className="absolute inset-0 z-0 scale-110"
-      >
-        <img 
-          src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1920&auto=format&fit=crop" 
+      <div ref={bgRef} className="absolute inset-0 z-0 scale-110">
+        <img
+          src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1920&auto=format&fit=crop"
           alt="Luxury Interior Design"
           className="w-full h-full object-cover"
+          width={1920}
+          height={1440}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           referrerPolicy="no-referrer"
         />
+
         <div className="hero-overlay"></div>
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-brand-dark"></div>
       </div>
 
       {/* Hero Content */}
-      <div 
-        ref={contentRef}
-        className="hero-readable-panel relative z-10 w-full px-5 text-center"
-      >
+      <div ref={contentRef} className="hero-readable-panel relative z-10 w-full px-5 text-center">
         <h1
           data-split-heading
           className="hero-brand-title mx-auto mb-6 max-w-[11ch] text-[3.6rem] leading-[0.96] sm:max-w-none sm:text-7xl md:max-w-[13ch] md:text-[clamp(5.5rem,8.8vw,8.75rem)] md:leading-[0.94]"
           style={{
             fontFamily: '"Nunito", "Manrope", ui-sans-serif, system-ui, sans-serif',
-            letterSpacing: '0.018em',
+            letterSpacing: "0.018em",
           }}
         >
           Умный Ремонт
         </h1>
-        <p data-hero-fade className="hero-support-text mobile-kicker mx-auto max-w-[28ch] text-[0.68rem] font-medium uppercase leading-loose md:max-w-none md:text-sm md:tracking-[0.5em]">
+        <p
+          data-hero-fade
+          className="hero-support-text mobile-kicker mx-auto max-w-[28ch] text-[0.68rem] font-medium uppercase leading-loose md:max-w-none md:text-sm md:tracking-[0.5em]"
+        >
           Премиальная реализация интерьеров
         </p>
-        <div data-hero-fade className="mx-auto mt-9 flex w-full max-w-[20rem] flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
+        <div
+          data-hero-fade
+          className="mx-auto mt-9 flex w-full max-w-[20rem] flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center"
+        >
           <a
             href="#contact"
-            className="premium-action group relative inline-flex items-center justify-center overflow-hidden border border-brand-accent bg-[#d2ad61] px-6 py-4 text-[10px] font-semibold uppercase text-brand-dark shadow-[0_16px_36px_rgba(0,0,0,0.28)] hover:text-white sm:px-8 sm:py-5"
+            className="premium-action btn-glass btn-glass-gold relative inline-flex items-center justify-center px-7 py-4 text-[10px] font-semibold uppercase sm:px-10 sm:py-5"
           >
-            <span className="mobile-action-text relative z-10 md:tracking-[0.28em]">Обсудить ремонт</span>
-            <span className="absolute inset-0 translate-y-full bg-brand-dark transition-transform duration-500 group-hover:translate-y-0" />
+            <span className="mobile-action-text relative z-10 md:tracking-[0.28em]">
+              Обсудить ремонт
+            </span>
           </a>
           <a
             href={telegramLinks.channel}
             target="_blank"
             rel="noreferrer"
-            className="premium-action hero-support-text inline-flex items-center justify-center border border-white/55 bg-black/50 px-6 py-4 text-[10px] uppercase text-white shadow-[0_16px_36px_rgba(0,0,0,0.22)] hover:border-white hover:bg-black/65 sm:px-8 sm:py-5"
+            className="premium-action btn-glass hero-support-text inline-flex items-center justify-center px-7 py-4 text-[10px] uppercase sm:px-10 sm:py-5"
           >
             <span className="mobile-action-text md:tracking-[0.28em]">Канал с советами</span>
           </a>
         </div>
 
-        <div data-hero-fade className="mx-auto mt-5 flex w-full max-w-[20rem] flex-col items-center gap-3 sm:max-w-none">
+        <div
+          data-hero-fade
+          className="mx-auto mt-5 flex w-full max-w-[20rem] flex-col items-center gap-3 sm:max-w-none"
+        >
           <span className="hero-support-text text-[9px] font-semibold uppercase tracking-[0.22em]">
             Написать напрямую
           </span>
@@ -127,7 +139,9 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes scroll-line {
           0% { transform: scaleY(0); transform-origin: top; }
           50% { transform: scaleY(1); transform-origin: top; }
@@ -137,7 +151,9 @@ export const Hero: React.FC = () => {
         .animate-scroll-line {
           animation: scroll-line 2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
         }
-      `}} />
+      `,
+        }}
+      />
     </section>
   );
 };

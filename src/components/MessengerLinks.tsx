@@ -1,10 +1,10 @@
-import React from 'react';
-import { messengerLinks } from '../utils/messengerLinks';
-import { cn } from '../utils/cn';
+import React from "react";
+import { messengerLinks } from "../utils/messengerLinks";
+import { cn } from "../utils/cn";
 
 type MessengerLinksProps = {
-  tone?: 'dark' | 'light';
-  layout?: 'row' | 'stack' | 'dock';
+  tone?: "dark" | "light";
+  layout?: "row" | "stack" | "dock";
   showLabels?: boolean;
   className?: string;
 };
@@ -42,48 +42,49 @@ const TelegramIcon: React.FC<MessengerIconProps> = ({ className }) => (
 
 const messengers = [
   {
-    id: 'max',
-    label: 'MAX',
+    id: "max",
+    label: "MAX",
     href: messengerLinks.max,
-    ariaLabel: 'Написать через MAX',
+    ariaLabel: "Написать через MAX",
     icon: MaxIcon,
     brandClass:
-      'border-transparent bg-[radial-gradient(136%_141%_at_100%_100%,rgba(141,40,200,0.78)_0%,rgba(124,66,250,0.78)_20%,rgba(0,122,255,0.78)_80%,rgba(96,156,235,0.78)_100%)] text-white shadow-[0_14px_36px_rgba(0,122,255,0.22)] hover:brightness-110',
+      "border-transparent bg-[radial-gradient(136%_141%_at_100%_100%,rgba(141,40,200,0.78)_0%,rgba(124,66,250,0.78)_20%,rgba(0,122,255,0.78)_80%,rgba(96,156,235,0.78)_100%)] text-white shadow-[0_14px_36px_rgba(0,122,255,0.22)]",
   },
   {
-    id: 'whatsapp',
-    label: 'WhatsApp',
+    id: "whatsapp",
+    label: "WhatsApp",
     href: messengerLinks.whatsapp,
-    ariaLabel: 'Написать в WhatsApp',
+    ariaLabel: "Написать в WhatsApp",
     icon: WhatsAppIcon,
     brandClass:
-      'border-transparent bg-[#25D366]/80 text-white shadow-[0_14px_36px_rgba(37,211,102,0.18)] hover:bg-[#25D366]/90',
+      "border-transparent bg-[#25D366]/80 text-white shadow-[0_14px_36px_rgba(37,211,102,0.18)]",
   },
   {
-    id: 'telegram',
-    label: 'Telegram',
+    id: "telegram",
+    label: "Telegram",
     href: messengerLinks.telegram,
-    ariaLabel: 'Написать в Telegram',
+    ariaLabel: "Написать в Telegram",
     icon: TelegramIcon,
     brandClass:
-      'border-transparent bg-[#27A7E7]/80 text-white shadow-[0_14px_36px_rgba(39,167,231,0.2)] hover:bg-[#27A7E7]/90',
+      "border-transparent bg-[#27A7E7]/80 text-white shadow-[0_14px_36px_rgba(39,167,231,0.2)]",
   },
 ];
 
 export const MessengerLinks: React.FC<MessengerLinksProps> = ({
-  tone = 'dark',
-  layout = 'row',
+  tone = "dark",
+  layout = "row",
   showLabels = true,
   className,
 }) => {
-  const isLight = tone === 'light';
+  const isLight = tone === "light";
 
   return (
     <div
       className={cn(
-        'flex max-w-full gap-2.5',
-        layout === 'stack' ? 'w-full flex-col' : 'items-center justify-center',
-        layout === 'dock' && 'rounded-full border border-white/12 bg-brand-dark/70 p-2 shadow-2xl shadow-black/24 backdrop-blur-md',
+        "flex max-w-full gap-2.5",
+        layout === "stack" ? "w-full flex-col" : "items-center justify-center",
+        layout === "dock" &&
+          "rounded-full border border-white/15 bg-white/[0.06] p-2 shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_20px_50px_rgba(0,0,0,0.34)] backdrop-blur-2xl",
         className,
       )}
       aria-label="Связаться в мессенджере"
@@ -95,21 +96,16 @@ export const MessengerLinks: React.FC<MessengerLinksProps> = ({
           target="_blank"
           rel="noreferrer"
           className={cn(
-            'premium-action group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.16em] transition-[filter,transform,box-shadow,background-color] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80',
-            layout === 'stack' ? 'w-full px-5 py-4' : 'h-12 px-4',
-            layout === 'dock' && 'h-11 w-11 px-0',
+            "premium-action btn-glass-edge group inline-flex min-h-13 items-center justify-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition-[filter,transform,box-shadow,background-color] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/80",
+            layout === "stack" ? "w-full px-6 py-4" : "h-13 px-5",
+            layout === "dock" && "h-12 w-12 min-h-0 px-0",
             brandClass,
-            isLight ? 'ring-1 ring-black/5' : 'ring-1 ring-white/10',
+            isLight ? "ring-1 ring-black/5" : "ring-1 ring-white/10",
           )}
           aria-label={ariaLabel}
         >
-          <Icon
-            className={cn(
-              layout === 'dock' ? 'h-5 w-5' : 'h-[18px] w-[18px]',
-              'text-white',
-            )}
-          />
-          {showLabels && layout !== 'dock' ? <span>{label}</span> : null}
+          <Icon className={cn(layout === "dock" ? "h-5 w-5" : "h-[18px] w-[18px]", "text-white")} />
+          {showLabels && layout !== "dock" ? <span>{label}</span> : null}
         </a>
       ))}
     </div>

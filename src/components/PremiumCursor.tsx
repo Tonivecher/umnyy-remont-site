@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import React, { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
-type CursorMode = 'default' | 'magnetic' | 'portfolio';
+type CursorMode = "default" | "magnetic" | "portfolio";
 
 const cursorVariants: Record<
   CursorMode,
@@ -10,36 +10,36 @@ const cursorVariants: Record<
     backgroundColor: string;
     borderColor: string;
     opacity: number;
-    blendMode: React.CSSProperties['mixBlendMode'];
+    blendMode: React.CSSProperties["mixBlendMode"];
   }
 > = {
   default: {
     size: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
-    borderColor: 'rgba(255, 255, 255, 0)',
-    opacity: 0.9,
-    blendMode: 'difference',
+    backgroundColor: "rgba(255, 255, 255, 0.92)",
+    borderColor: "rgba(255, 255, 255, 0)",
+    opacity: 0.85,
+    blendMode: "normal",
   },
   magnetic: {
     size: 64,
-    backgroundColor: 'rgba(197, 160, 89, 0.14)',
-    borderColor: 'rgba(197, 160, 89, 0.45)',
+    backgroundColor: "rgba(197, 160, 89, 0.14)",
+    borderColor: "rgba(197, 160, 89, 0.45)",
     opacity: 1,
-    blendMode: 'normal',
+    blendMode: "normal",
   },
   portfolio: {
     size: 104,
-    backgroundColor: 'rgba(10, 10, 10, 0.55)',
-    borderColor: 'rgba(255, 255, 255, 0.18)',
+    backgroundColor: "rgba(10, 10, 10, 0.55)",
+    borderColor: "rgba(255, 255, 255, 0.18)",
     opacity: 1,
-    blendMode: 'normal',
+    blendMode: "normal",
   },
 };
 
 export const PremiumCursor: React.FC = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [mode, setMode] = useState<CursorMode>('default');
+  const [mode, setMode] = useState<CursorMode>("default");
 
   const pointerX = useMotionValue(-120);
   const pointerY = useMotionValue(-120);
@@ -57,22 +57,22 @@ export const PremiumCursor: React.FC = () => {
   });
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    const mediaQuery = window.matchMedia('(pointer: fine)');
+    const mediaQuery = window.matchMedia("(pointer: fine)");
 
     const syncCursorAvailability = () => {
       const nextEnabled = mediaQuery.matches;
       setIsEnabled(nextEnabled);
-      document.body.classList.toggle('has-premium-cursor', nextEnabled);
+      document.body.classList.toggle("has-premium-cursor", nextEnabled);
     };
 
     syncCursorAvailability();
-    mediaQuery.addEventListener('change', syncCursorAvailability);
+    mediaQuery.addEventListener("change", syncCursorAvailability);
 
     return () => {
-      document.body.classList.remove('has-premium-cursor');
-      mediaQuery.removeEventListener('change', syncCursorAvailability);
+      document.body.classList.remove("has-premium-cursor");
+      mediaQuery.removeEventListener("change", syncCursorAvailability);
     };
   }, []);
 
@@ -82,33 +82,36 @@ export const PremiumCursor: React.FC = () => {
     const handlePointerMove = (event: MouseEvent) => {
       pointerX.set(event.clientX);
       pointerY.set(event.clientY);
-      setIsVisible(true);
+      setIsVisible((visible) => (visible ? visible : true));
+    };
 
+    // Mode resolution runs on over/out (rare) instead of every move (~120/s).
+    const handlePointerOver = (event: MouseEvent) => {
       const target = event.target instanceof Element ? event.target : null;
-      if (target?.closest('[data-cursor-portfolio]')) {
-        setMode('portfolio');
+      if (target?.closest("[data-cursor-portfolio]")) {
+        setMode("portfolio");
         return;
       }
-
-      if (target?.closest('[data-cursor-magnetic]')) {
-        setMode('magnetic');
+      if (target?.closest("[data-cursor-magnetic]")) {
+        setMode("magnetic");
         return;
       }
-
-      setMode('default');
+      setMode("default");
     };
 
     const handlePointerLeave = () => {
       setIsVisible(false);
-      setMode('default');
+      setMode("default");
     };
 
-    window.addEventListener('mousemove', handlePointerMove, { passive: true });
-    document.addEventListener('mouseleave', handlePointerLeave);
+    window.addEventListener("mousemove", handlePointerMove, { passive: true });
+    window.addEventListener("mouseover", handlePointerOver, { passive: true });
+    document.addEventListener("mouseleave", handlePointerLeave);
 
     return () => {
-      window.removeEventListener('mousemove', handlePointerMove);
-      document.removeEventListener('mouseleave', handlePointerLeave);
+      window.removeEventListener("mousemove", handlePointerMove);
+      window.removeEventListener("mouseover", handlePointerOver);
+      document.removeEventListener("mouseleave", handlePointerLeave);
     };
   }, [isEnabled, pointerX, pointerY]);
 
@@ -131,11 +134,12 @@ export const PremiumCursor: React.FC = () => {
       }}
       transition={{
         duration: 0.18,
-        ease: 'easeOut',
+        ease: "easeOut",
       }}
     >
       <motion.div
-        className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-sm"
+        className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border"
+
         style={{
           mixBlendMode: activeVariant.blendMode,
         }}
@@ -147,7 +151,7 @@ export const PremiumCursor: React.FC = () => {
           opacity: activeVariant.opacity,
         }}
         transition={{
-          type: 'spring',
+          type: "spring",
           stiffness: 240,
           damping: 24,
           mass: 0.45,
@@ -156,12 +160,12 @@ export const PremiumCursor: React.FC = () => {
         <motion.span
           className="pl-[0.32em] text-[8px] uppercase tracking-[0.32em] text-white/82"
           animate={{
-            opacity: mode === 'portfolio' ? 1 : 0,
-            scale: mode === 'portfolio' ? 1 : 0.86,
+            opacity: mode === "portfolio" ? 1 : 0,
+            scale: mode === "portfolio" ? 1 : 0.86,
           }}
           transition={{
             duration: 0.18,
-            ease: 'easeOut',
+            ease: "easeOut",
           }}
         >
           View

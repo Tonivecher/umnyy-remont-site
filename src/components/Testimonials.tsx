@@ -1,11 +1,15 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Star } from 'lucide-react';
-import Marquee from 'react-fast-marquee';
-import { ReviewForm } from './ReviewForm';
-import { ReviewModerationPanel } from './ReviewModerationPanel';
-import { formatReviewDate, isReviewsAdminMode, PublicReview } from '@/src/utils/reviews';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Star } from "lucide-react";
+import MarqueeImport from "react-fast-marquee";
+
+// react-fast-marquee ships CJS; normalize the interop default in the Vite/SSR runtime.
+const Marquee = ((MarqueeImport as unknown as { default?: typeof MarqueeImport }).default ??
+  MarqueeImport) as typeof MarqueeImport;
+import { ReviewForm } from "./ReviewForm";
+import { ReviewModerationPanel } from "./ReviewModerationPanel";
+import { formatReviewDate, isReviewsAdminMode, PublicReview } from "@/utils/reviews";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,17 +23,19 @@ type DisplayTestimonial = {
 
 const staticTestimonials: DisplayTestimonial[] = [
   {
-    id: 'static-alexander-volkov',
-    quote: 'Уровень детализации и приверженность первоначальному архитектурному видению превзошли наши ожидания. По-настоящему премиальный опыт.',
-    author: 'Александр Волков',
-    meta: 'Частный клиент',
+    id: "static-alexander-volkov",
+    quote:
+      "Уровень детализации и приверженность первоначальному архитектурному видению превзошли наши ожидания. По-настоящему премиальный опыт.",
+    author: "Александр Волков",
+    meta: "Частный клиент",
     rating: 5,
   },
   {
-    id: 'static-elena-petrova',
-    quote: 'Работа с «Умным Ремонтом» — это спокойствие. Они понимают язык роскоши и важность точности.',
-    author: 'Елена Петрова',
-    meta: 'Архитектурный дизайнер',
+    id: "static-elena-petrova",
+    quote:
+      "Работа с «Умным Ремонтом» — это спокойствие. Они понимают язык роскоши и важность точности.",
+    author: "Елена Петрова",
+    meta: "Архитектурный дизайнер",
     rating: 5,
   },
 ];
@@ -42,8 +48,8 @@ const TestimonialCard: React.FC<{ testimonial: DisplayTestimonial }> = ({ testim
           <Star
             key={index}
             size={14}
-            fill={index < testimonial.rating ? 'currentColor' : 'none'}
-            className={index < testimonial.rating ? 'text-brand-accent' : 'text-white/10'}
+            fill={index < testimonial.rating ? "currentColor" : "none"}
+            className={index < testimonial.rating ? "text-brand-accent" : "text-white/10"}
           />
         ))}
       </div>
@@ -55,7 +61,9 @@ const TestimonialCard: React.FC<{ testimonial: DisplayTestimonial }> = ({ testim
 
     <div className="mt-10 border-t border-white/8 pt-6">
       <span className="block text-sm font-medium tracking-wide">{testimonial.author}</span>
-      <span className="mt-1 block text-[10px] uppercase tracking-[0.2em] opacity-40">{testimonial.meta}</span>
+      <span className="mt-1 block text-[10px] uppercase tracking-[0.2em] opacity-40">
+        {testimonial.meta}
+      </span>
     </div>
   </article>
 );
@@ -67,9 +75,9 @@ export const Testimonials: React.FC = () => {
 
   const loadReviews = async () => {
     try {
-      const response = await fetch('/api/reviews');
+      const response = await fetch("/api/reviews");
       if (!response.ok) {
-        throw new Error('Failed to load reviews');
+        throw new Error("Failed to load reviews");
       }
 
       const payload = await response.json();
@@ -90,27 +98,24 @@ export const Testimonials: React.FC = () => {
         id: review.id,
         quote: review.text,
         author: review.name,
-        meta: `${review.city || 'Без города'} • ${formatReviewDate(review.approvedAt || review.createdAt)}`,
+        meta: `${review.city || "Без города"} • ${formatReviewDate(review.approvedAt || review.createdAt)}`,
         rating: review.rating,
       })),
       ...staticTestimonials,
     ],
-    [approvedReviews]
+    [approvedReviews],
   );
 
   const marqueeRows = useMemo(() => {
     const primary = testimonials.filter((_, index) => index % 2 === 0);
     const secondary = testimonials.filter((_, index) => index % 2 !== 0);
 
-    return [
-      primary.length ? primary : testimonials,
-      secondary.length ? secondary : testimonials,
-    ];
+    return [primary.length ? primary : testimonials, secondary.length ? secondary : testimonials];
   }, [testimonials]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const rows = gsap.utils.toArray<HTMLElement>('[data-testimonials-marquee]');
+      const rows = gsap.utils.toArray<HTMLElement>("[data-testimonials-marquee]");
       if (!rows.length) return;
 
       gsap.from(rows, {
@@ -118,10 +123,10 @@ export const Testimonials: React.FC = () => {
         opacity: 0,
         duration: 1.2,
         stagger: 0.14,
-        ease: 'power3.out',
+        ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%',
+          start: "top 80%",
         },
       });
     }, sectionRef);
@@ -130,10 +135,16 @@ export const Testimonials: React.FC = () => {
   }, [approvedReviews.length]);
 
   return (
-    <section ref={sectionRef} id="testimonials" className="py-32 md:py-64 px-8 md:px-24 bg-brand-dark">
+    <section
+      ref={sectionRef}
+      id="testimonials"
+      className="py-32 md:py-64 px-8 md:px-24 bg-brand-dark"
+    >
       <div className="mb-24">
         <span className="text-[10px] uppercase tracking-[0.3em] mb-4 block opacity-40">Голоса</span>
-        <h2 data-split-heading className="text-5xl md:text-7xl font-display">Отзывы</h2>
+        <h2 data-split-heading className="text-5xl md:text-7xl font-display">
+          Отзывы
+        </h2>
       </div>
 
       {adminMode ? <ReviewModerationPanel onReviewsUpdated={loadReviews} /> : null}
@@ -149,7 +160,7 @@ export const Testimonials: React.FC = () => {
               pauseOnHover
               gradient={false}
               speed={index === 0 ? 26 : 22}
-              direction={index === 0 ? 'left' : 'right'}
+              direction={index === 0 ? "left" : "right"}
             >
               {row.map((testimonial) => (
                 <TestimonialCard key={`${index}-${testimonial.id}`} testimonial={testimonial} />

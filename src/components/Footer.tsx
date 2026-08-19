@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { telegramLinks } from '../utils/telegramLinks';
+import { telegramLinks } from "../utils/telegramLinks";
 
 export const Footer: React.FC = () => {
   return (
@@ -15,23 +15,38 @@ export const Footer: React.FC = () => {
             />
           </a>
           <p className="text-sm opacity-40 max-w-sm leading-relaxed">
-            Архитектурная реализация интерьеров для тех, кто ценит точность, материальность и вневременной дизайн.
+            Архитектурная реализация интерьеров для тех, кто ценит точность, материальность и
+            вневременной дизайн.
           </p>
         </div>
 
         <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] mb-6 block opacity-40">Telegram</span>
-          <ul className="flex flex-col gap-4 text-xs uppercase tracking-widest">
+          <span className="text-[10px] uppercase tracking-[0.2em] mb-6 block opacity-40">
+            Telegram
+          </span>
+          <ul className="flex flex-col gap-1 text-xs uppercase tracking-widest">
             <li>
-              <a href={telegramLinks.channel} target="_blank" rel="noreferrer" className="hover:opacity-50 transition-opacity">
+              <a
+                href={telegramLinks.channel}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center hover:opacity-50 transition-opacity"
+              >
                 Канал «Про умный ремонт»
               </a>
             </li>
-            <li><a href="#" className="hover:opacity-50 transition-opacity">Политика конфиденциальности</a></li>
+            <li>
+              <a
+                href="#"
+                className="inline-flex min-h-11 items-center hover:opacity-50 transition-opacity"
+              >
+                Политика конфиденциальности
+              </a>
+            </li>
           </ul>
         </div>
       </div>
-      
+
       <div className="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-white/5 text-[9px] uppercase tracking-[0.3em] opacity-30">
         <span>© 2026 Умный Ремонт. Все права защищены.</span>
         <span className="mt-4 md:mt-0">Создано для совершенства</span>
