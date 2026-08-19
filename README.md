@@ -27,18 +27,13 @@ NODE_ENV=production npm start
 
 Приложение слушает платформенный `PORT` на `0.0.0.0`. Для Timeweb используются Node.js 22, `DB_PATH=/data` и секрет `REVIEWS_ADMIN_PASSWORD`.
 
-Заявки из обеих форм сохраняются в SQLite и отправляются на `umniremont@gmail.com`. Для Gmail SMTP добавьте переменные окружения:
+Заявки из обеих форм сохраняются в SQLite и отправляются на `umniremont@gmail.com` через защищённый HTTPS-вебхук Google Apps Script:
 
 ```sh
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=465
-SMTP_SECURE=true
-SMTP_USER=umniremont@gmail.com
-SMTP_PASS=<пароль приложения Google>
-LEADS_EMAIL_TO=umniremont@gmail.com
-LEADS_EMAIL_FROM=umniremont@gmail.com
+LEADS_WEBHOOK_URL=<URL веб-приложения Google Apps Script>
+LEADS_WEBHOOK_SECRET=<случайный секрет вебхука>
 ```
 
-`SMTP_PASS` должен быть паролем приложения Google, а не обычным паролем аккаунта. Секрет не хранится в Git.
+Секрет и URL хранятся только в переменных окружения Timeweb и не попадают в Git. HTTPS используется потому, что App Platform блокирует исходящие SMTP-порты.
 
 Telegram-бот находится в `telegram-bot/`; инструкции запуска — в `telegram-bot/README.md`.
