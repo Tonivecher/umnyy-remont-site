@@ -133,7 +133,7 @@ export const Hero: React.FC = () => {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-4">
-        <span className="text-[9px] uppercase tracking-[0.3em] opacity-40">Листайте</span>
+        <span className="text-[9px] uppercase tracking-[0.3em] opacity-60">Листайте</span>
         <div className="w-px h-12 bg-white/20 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-white origin-top animate-scroll-line"></div>
         </div>

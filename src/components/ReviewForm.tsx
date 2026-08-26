@@ -83,7 +83,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="review-name" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Имя</label>
+            <label htmlFor="review-name" className="text-[10px] uppercase tracking-[0.2em] opacity-60">Имя</label>
             <input
               id="review-name"
               type="text"
@@ -96,7 +96,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="review-city" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Город</label>
+            <label htmlFor="review-city" className="text-[10px] uppercase tracking-[0.2em] opacity-60">Город</label>
             <input
               id="review-city"
               type="text"
@@ -125,7 +125,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
         </div>
 
         <div className="space-y-2">
-          <p id="review-rating-label" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Оценка</p>
+          <p id="review-rating-label" className="text-[10px] uppercase tracking-[0.2em] opacity-60">Оценка</p>
           <div className="flex gap-1" role="group" aria-labelledby="review-rating-label">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -150,7 +150,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="review-text" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Текст отзыва</label>
+          <label htmlFor="review-text" className="text-[10px] uppercase tracking-[0.2em] opacity-60">Текст отзыва</label>
           <textarea
             id="review-text"
             value={text}

@@ -210,7 +210,7 @@ export const Portfolio: React.FC = () => {
     <section id="portfolio" className="bg-brand-dark px-6 py-24 md:px-12 xl:px-24 md:py-40">
       <div className="mb-20 flex flex-col gap-10 md:mb-32 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
-          <span className="mb-6 block text-[10px] uppercase tracking-[0.3em] opacity-40">
+          <span className="mb-6 block text-[10px] uppercase tracking-[0.3em] opacity-60">
             Избранные работы
           </span>
           <h2
@@ -222,7 +222,7 @@ export const Portfolio: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-start gap-6 md:items-end">
-          <div className="num-tabular hidden text-[10px] uppercase tracking-[0.2em] opacity-40 md:block">
+          <div className="num-tabular hidden text-[10px] uppercase tracking-[0.2em] opacity-60 md:block">
             {`Показано 01 — ${String(projects.length).padStart(2, "0")}`}
           </div>
 
@@ -230,7 +230,6 @@ export const Portfolio: React.FC = () => {
             <a
               href="#contact"
               className="premium-action btn-glass relative inline-flex w-full items-center justify-center px-9 py-5 text-[10px] uppercase text-white sm:w-auto sm:px-11 sm:text-[11px]"
-              aria-label="Перейти к контактам для обсуждения проекта"
             >
               <span className="mobile-action-text relative z-10 md:tracking-[0.25em]">
                 Обсудить проект
@@ -271,7 +270,7 @@ export const Portfolio: React.FC = () => {
                 {/* Content & Secondary Images */}
                 <div className="w-full md:w-5/12 lg:w-1/3 flex flex-col justify-center">
                   <div className="mb-10">
-                    <span className="text-[10px] uppercase tracking-[0.24em] text-white/40 block mb-4">
+                    <span className="mb-4 block text-[10px] uppercase tracking-[0.24em] text-white/60">
                       {project.category} &bull; {project.stage}
                     </span>
                     <h3 className="text-3xl md:text-4xl lg:text-5xl font-display leading-tight mb-5 text-white/90">

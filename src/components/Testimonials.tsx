@@ -62,7 +62,7 @@ const TestimonialCard: React.FC<{ testimonial: DisplayTestimonial }> = ({ testim
 
     <div className="mt-10 border-t border-white/8 pt-6">
       <span className="block text-sm font-medium tracking-wide">{testimonial.author}</span>
-      <span className="mt-1 block text-[10px] uppercase tracking-[0.2em] opacity-40">
+      <span className="mt-1 block text-[10px] uppercase tracking-[0.2em] opacity-60">
         {testimonial.meta}
       </span>
     </div>
@@ -144,7 +144,7 @@ export const Testimonials: React.FC = () => {
       className="py-32 md:py-64 px-8 md:px-24 bg-brand-dark"
     >
       <div className="mb-24">
-        <span className="text-[10px] uppercase tracking-[0.3em] mb-4 block opacity-40">Голоса</span>
+        <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] opacity-60">Голоса</span>
         <h2 data-split-heading className="text-5xl md:text-7xl font-display">
           Отзывы
         </h2>

@@ -24,7 +24,7 @@ const timelines = [
 const fieldClass =
   "w-full rounded-full bg-white/[0.04] border border-white/20 px-5 py-3.5 text-base md:text-sm outline-none transition-colors focus:border-white placeholder:text-white/25";
 
-const labelClass = "text-[10px] uppercase tracking-[0.2em] opacity-40";
+const labelClass = "text-[10px] uppercase tracking-[0.2em] opacity-60";
 
 export const LeadForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -110,7 +110,7 @@ export const LeadForm: React.FC = () => {
       id="lead-form"
       className="mt-24 rounded-[2rem] border border-white/10 bg-white/5 p-7 backdrop-blur-xl md:mt-32 md:p-12"
     >
-      <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] opacity-40">
+      <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] opacity-60">
         Заявка на расчёт
       </span>
       <h3 className="mb-4 text-2xl font-display md:text-3xl">Рассчитаем ваш ремонт</h3>

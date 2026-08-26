@@ -14,14 +14,14 @@ export const Footer: React.FC = () => {
               className="h-12 w-auto md:h-16"
             />
           </a>
-          <p className="text-sm opacity-40 max-w-sm leading-relaxed">
+          <p className="max-w-sm text-sm leading-relaxed opacity-60">
             Архитектурная реализация интерьеров для тех, кто ценит точность, материальность и
             вневременной дизайн.
           </p>
         </div>
 
         <div>
-          <span className="text-[10px] uppercase tracking-[0.2em] mb-6 block opacity-40">
+          <span className="mb-6 block text-[10px] uppercase tracking-[0.2em] opacity-60">
             Telegram
           </span>
           <ul className="flex flex-col gap-1 text-xs uppercase tracking-widest">

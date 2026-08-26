@@ -15,7 +15,7 @@ const propertyTypes: { value: PropertyType; label: string }[] = [
 const fieldClass =
   "w-full rounded-full bg-white/[0.04] border border-white/20 px-5 py-3.5 text-base md:text-sm outline-none transition-colors focus:border-white placeholder:text-white/25";
 
-const labelClass = "text-[10px] uppercase tracking-[0.2em] opacity-40";
+const labelClass = "text-[10px] uppercase tracking-[0.2em] opacity-60";
 
 export const LeadBanner: React.FC = () => {
   const [name, setName] = useState("");
@@ -92,7 +92,7 @@ export const LeadBanner: React.FC = () => {
       <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/5 p-7 backdrop-blur-xl md:p-12">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <span className="mb-3 block text-[10px] uppercase tracking-[0.3em] opacity-40">
+            <span className="mb-3 block text-[10px] uppercase tracking-[0.3em] opacity-60">
               Быстрая заявка
             </span>
             <h2 className="text-2xl font-display md:text-3xl">Рассчитаем стоимость ремонта</h2>
