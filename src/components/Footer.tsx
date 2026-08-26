@@ -43,8 +43,11 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-white/5 text-[9px] uppercase tracking-[0.3em] opacity-30">
-        <span>© 2026 Умный Ремонт. Все права защищены.</span>
+      <div className="flex flex-col items-center justify-between border-t border-white/5 pt-12 text-[10px] uppercase tracking-[0.3em] text-white/60 md:flex-row">
+        <div className="text-center md:text-left">
+          <span className="block">© 2026 Умный Ремонт. Все права защищены.</span>
+          <span className="mt-2 block">Информация обновлена 26 августа 2026 года.</span>
+        </div>
         <a className="mt-4 inline-flex min-h-11 items-center md:mt-0 hover:opacity-80" href="https://github.com/Tonivecher" target="_blank" rel="noreferrer noopener">Разработка сайта — Николай · GitHub</a>
       </div>
     </footer>

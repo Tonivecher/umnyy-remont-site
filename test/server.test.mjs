@@ -39,6 +39,8 @@ test("public routes, metadata and headers", async () => {
   assert.match(html, /rel="canonical" href="https:\/\/umniremont\.pro\//);
   assert.match(html, /og:site_name/);
   assert.match(html, /inLanguage/);
+  assert.match(html, /\"WebPage\"/);
+  assert.match(html, /\"Organization\"/);
   assert.match(home.headers.get("content-security-policy") || "", /default-src 'self'/);
   assert.equal(home.headers.get("x-content-type-options"), "nosniff");
   assert.match(home.headers.get("strict-transport-security") || "", /max-age=/);
@@ -62,6 +64,9 @@ test("public routes, metadata and headers", async () => {
   assert.equal(sitemap.status, 200);
   assert.match(await sitemap.text(), /<urlset/);
   assert.match(await (await fetch(`${baseUrl}/robots.txt`)).text(), /Sitemap: https:\/\/umniremont\.pro\/sitemap\.xml/);
+  const llms = await fetch(`${baseUrl}/llms.txt`);
+  assert.equal(llms.status, 200);
+  assert.match(await llms.text(), /## Подтверждённые сведения/);
 });
 
 test("SEO shell styles cannot match the React application", () => {
@@ -70,6 +75,12 @@ test("SEO shell styles cannot match the React application", () => {
   assert.ok(!sourceIndexHtml.includes("#root > main"));
   assert.ok(!sourceIndexHtml.includes("#root h1"));
   assert.ok(!sourceIndexHtml.includes("#root a"));
+  const shellText = sourceIndexHtml
+    .match(/<main class="seo-shell">([\s\S]*?)<\/main>/)?.[1]
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&[^;]+;/g, " ")
+    .trim();
+  assert.ok(shellText && shellText.split(/\s+/).length >= 500);
 });
 
 test("consent is enforced and accepted data is serialized safely", async () => {

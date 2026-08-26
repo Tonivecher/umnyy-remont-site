@@ -9,6 +9,7 @@ import { Hero } from "@/components/Hero";
 import { LeadBanner } from "@/components/LeadBanner";
 import { About } from "@/components/About";
 import { Portfolio } from "@/components/Portfolio";
+import { FAQ } from "@/components/FAQ";
 import { Quote } from "@/components/Quote";
 import { Testimonials } from "@/components/Testimonials";
 import { CTA } from "@/components/CTA";
@@ -187,6 +188,7 @@ export default function App() {
       <LeadBanner />
       <About />
       <Portfolio />
+      <FAQ />
       <Quote />
       <Testimonials />
       <CTA />
