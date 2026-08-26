@@ -112,6 +112,8 @@ export default function App() {
           }
 
           headings.forEach((heading) => {
+            const accessibleLabel = heading.textContent?.replace(/\s+/g, " ").trim();
+            if (accessibleLabel) heading.setAttribute("aria-label", accessibleLabel);
             const split = new SplitType(heading, {
               types: "lines,chars",
               lineClass: "split-line",

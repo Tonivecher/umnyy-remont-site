@@ -8,6 +8,7 @@ export const Quote: React.FC = () => {
   const textRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ctx = gsap.context(() => {
       gsap.from(textRef.current, {
         y: 50,

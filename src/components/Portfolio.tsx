@@ -169,6 +169,7 @@ export const Portfolio: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ctx = gsap.context(() => {
       // Single batched trigger instead of one ScrollTrigger per block.
       ScrollTrigger.batch(".portfolio-item", {

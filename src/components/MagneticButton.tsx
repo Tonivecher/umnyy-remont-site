@@ -13,6 +13,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({ children, classN
   useEffect(() => {
     const button = buttonRef.current;
     if (!button) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
     const xTo = gsap.quickTo(button, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });

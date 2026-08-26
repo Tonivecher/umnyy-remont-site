@@ -11,6 +11,7 @@ export const About: React.FC = () => {
   const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
 
     const ctx = gsap.context(() => {
@@ -75,11 +76,11 @@ export const About: React.FC = () => {
         </div>
         <div className="mt-12">
           <MagneticButton>
-            <button className="premium-action btn-glass btn-glass-light relative w-full px-9 py-4 sm:w-auto">
+            <a href="#portfolio" className="premium-action btn-glass btn-glass-light relative inline-flex w-full items-center justify-center px-9 py-4 sm:w-auto">
               <span className="mobile-action-text relative z-10 text-[10px] uppercase md:tracking-[0.2em]">
-                Узнать о процессе
+                Смотреть работы
               </span>
-            </button>
+            </a>
           </MagneticButton>
         </div>
       </div>
@@ -89,12 +90,11 @@ export const About: React.FC = () => {
         className="media-outline-light aspect-[4/5] overflow-hidden rounded-[1.75rem]"
       >
         <img
-          src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
-          alt="Minimalist Architecture"
+          src="/images/about-architecture.jpg"
+          alt="Светлый интерьер с архитектурной композицией"
           className="w-full h-full object-cover"
           width={1200}
           height={801}
-          referrerPolicy="no-referrer"
           loading="lazy"
           decoding="async"
         />

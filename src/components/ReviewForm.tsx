@@ -13,16 +13,22 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [company, setCompany] = useState("");
+  const [publicationConsent, setPublicationConsent] = useState(false);
+  const [consentError, setConsentError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!name || !text || isSubmitting) return;
+    if (!name || !text || !publicationConsent || isSubmitting) {
+      if (!publicationConsent) setConsentError("Подтвердите согласие на публикацию отзыва.");
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError("");
+    setConsentError("");
     setSubmitSuccess("");
 
     try {
@@ -37,6 +43,8 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
           text,
           rating,
           company,
+          publicationConsent,
+          consentVersion: "2026-08-26",
         }),
       });
 
@@ -50,6 +58,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
       setText("");
       setRating(5);
       setCompany("");
+      setPublicationConsent(false);
       setSubmitSuccess(payload?.message || "Спасибо. Отзыв отправлен на модерацию.");
       await onReviewSubmitted?.();
     } catch (submitFailure) {
@@ -74,8 +83,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-[0.2em] opacity-40">Имя</label>
+            <label htmlFor="review-name" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Имя</label>
             <input
+              id="review-name"
               type="text"
               value={name}
               onChange={(event) => setName(event.target.value)}
@@ -86,8 +96,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-[0.2em] opacity-40">Город</label>
+            <label htmlFor="review-city" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Город</label>
             <input
+              id="review-city"
               type="text"
               value={city}
               onChange={(event) => setCity(event.target.value)}
@@ -99,9 +110,11 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
         </div>
 
         <div className="hidden" aria-hidden="true">
-          <label>
+          <label htmlFor="review-company">
             Компания
             <input
+              id="review-company"
+              name="company"
               type="text"
               tabIndex={-1}
               autoComplete="off"
@@ -112,8 +125,8 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-[0.2em] opacity-40">Оценка</label>
-          <div className="flex gap-1">
+          <p id="review-rating-label" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Оценка</p>
+          <div className="flex gap-1" role="group" aria-labelledby="review-rating-label">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
@@ -137,8 +150,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-[0.2em] opacity-40">Текст отзыва</label>
+          <label htmlFor="review-text" className="text-[10px] uppercase tracking-[0.2em] opacity-40">Текст отзыва</label>
           <textarea
+            id="review-text"
             value={text}
             onChange={(event) => setText(event.target.value)}
             required
@@ -149,7 +163,13 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
           />
         </div>
 
-        <div className="pt-4">
+        <label htmlFor="review-publication-consent" className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-white/70">
+          <input id="review-publication-consent" type="checkbox" required checked={publicationConsent} onChange={(event) => { setPublicationConsent(event.target.checked); setConsentError(""); }} aria-invalid={consentError ? true : undefined} aria-describedby="review-publication-consent-help review-publication-consent-error" className="mt-1 h-5 w-5 shrink-0 accent-brand-accent" />
+          <span>Даю отдельное согласие на обработку и публикацию отзыва.</span>
+        </label>
+        <p id="review-publication-consent-help" className="text-xs leading-relaxed text-white/50">Текст согласия: <a className="underline underline-offset-4" href="/review-publication-consent/" target="_blank" rel="noreferrer">обработка и публикация отзыва</a>. Подробнее: <a className="underline underline-offset-4" href="/privacy-policy/" target="_blank" rel="noreferrer">политика конфиденциальности</a>.</p>
+        <p id="review-publication-consent-error" role="alert" className="text-xs text-red-200/80">{consentError}</p>
+        <div className="pt-1">
           <MagneticButton className="w-full sm:w-auto">
             <button
               type="submit"

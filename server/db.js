@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const dataDir = process.env.DB_PATH || path.join(__dirname, "data");
+
 fs.mkdirSync(dataDir, { recursive: true });
 
 const db = new Database(path.join(dataDir, "database.sqlite"));
@@ -41,13 +41,31 @@ db.exec(`
   );
 `);
 
+const addColumnIfMissing = (table, definition) => {
+  const column = definition.split(/\s+/, 1)[0];
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all().map((item) => item.name);
+  if (!columns.includes(column)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${definition}`);
+};
+
+addColumnIfMissing("leads", "consentVersion TEXT");
+addColumnIfMissing("leads", "consentAt TEXT");
+addColumnIfMissing("reviews", "consentVersion TEXT");
+addColumnIfMissing("reviews", "consentAt TEXT");
+addColumnIfMissing("reviews", "publicationConsentVersion TEXT");
+addColumnIfMissing("reviews", "publicationConsentAt TEXT");
+
 export const listReviews = () =>
   db.prepare("SELECT * FROM reviews ORDER BY updatedAt DESC").all();
 
 export const saveReview = (review) => {
   db.prepare(`
-    INSERT INTO reviews (id, name, city, text, rating, status, createdAt, updatedAt)
-    VALUES (@id, @name, @city, @text, @rating, @status, @createdAt, @updatedAt)
+    INSERT INTO reviews (
+      id, name, city, text, rating, status, createdAt, updatedAt,
+      consentVersion, consentAt, publicationConsentVersion, publicationConsentAt
+    ) VALUES (
+      @id, @name, @city, @text, @rating, @status, @createdAt, @updatedAt,
+      @consentVersion, @consentAt, @publicationConsentVersion, @publicationConsentAt
+    )
   `).run(review);
   return review;
 };
@@ -58,12 +76,9 @@ export const getReviewById = (id) =>
 export const updateReviewStatus = (id, nextStatus) => {
   const now = new Date().toISOString();
   const statements = {
-    approved:
-      "UPDATE reviews SET status = ?, updatedAt = ?, approvedAt = ?, rejectedAt = NULL WHERE id = ?",
-    rejected:
-      "UPDATE reviews SET status = ?, updatedAt = ?, rejectedAt = ?, approvedAt = NULL WHERE id = ?",
-    pending:
-      "UPDATE reviews SET status = ?, updatedAt = ?, approvedAt = NULL, rejectedAt = NULL WHERE id = ?",
+    approved: "UPDATE reviews SET status = ?, updatedAt = ?, approvedAt = ?, rejectedAt = NULL WHERE id = ?",
+    rejected: "UPDATE reviews SET status = ?, updatedAt = ?, rejectedAt = ?, approvedAt = NULL WHERE id = ?",
+    pending: "UPDATE reviews SET status = ?, updatedAt = ?, approvedAt = NULL, rejectedAt = NULL WHERE id = ?",
   };
   const params = nextStatus === "pending" ? [nextStatus, now, id] : [nextStatus, now, now, id];
   db.prepare(statements[nextStatus]).run(...params);
@@ -83,20 +98,20 @@ export const countStatuses = () =>
   );
 
 export const listLeads = (status) => {
-  if (status) {
-    return db
-      .prepare("SELECT * FROM leads WHERE status = ? ORDER BY createdAt DESC")
-      .all(status);
-  }
-  return db.prepare("SELECT * FROM leads ORDER BY createdAt DESC").all();
+  const statement = status
+    ? "SELECT * FROM leads WHERE status = ? ORDER BY createdAt DESC"
+    : "SELECT * FROM leads ORDER BY createdAt DESC";
+  return status ? db.prepare(statement).all(status) : db.prepare(statement).all();
 };
 
 export const saveLead = (lead) => {
   db.prepare(`
     INSERT INTO leads (
-      id, name, phone, propertyType, area, budget, timeline, comment, status, createdAt, updatedAt
+      id, name, phone, propertyType, area, budget, timeline, comment,
+      status, createdAt, updatedAt, consentVersion, consentAt
     ) VALUES (
-      @id, @name, @phone, @propertyType, @area, @budget, @timeline, @comment, @status, @createdAt, @updatedAt
+      @id, @name, @phone, @propertyType, @area, @budget, @timeline, @comment,
+      @status, @createdAt, @updatedAt, @consentVersion, @consentAt
     )
   `).run(lead);
   return lead;

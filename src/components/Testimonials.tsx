@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Star } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 import MarqueeImport from "react-fast-marquee";
 
 // react-fast-marquee ships CJS; normalize the interop default in the Vite/SSR runtime.
@@ -70,6 +71,7 @@ const TestimonialCard: React.FC<{ testimonial: DisplayTestimonial }> = ({ testim
 
 export const Testimonials: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
   const [approvedReviews, setApprovedReviews] = useState<PublicReview[]>([]);
   const [adminMode, setAdminMode] = useState(false);
 
@@ -114,6 +116,7 @@ export const Testimonials: React.FC = () => {
   }, [testimonials]);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     const ctx = gsap.context(() => {
       const rows = gsap.utils.toArray<HTMLElement>("[data-testimonials-marquee]");
       if (!rows.length) return;
@@ -132,7 +135,7 @@ export const Testimonials: React.FC = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [approvedReviews.length]);
+  }, [approvedReviews.length, prefersReducedMotion]);
 
   return (
     <section
@@ -149,7 +152,16 @@ export const Testimonials: React.FC = () => {
 
       {adminMode ? <ReviewModerationPanel onReviewsUpdated={loadReviews} /> : null}
 
-      <div className="mb-32 space-y-5 overflow-hidden">
+      <ul className="sr-only">
+        {testimonials.map((testimonial) => (
+          <li key={`accessible-${testimonial.id}`}>
+            {testimonial.author}, {testimonial.meta}. Оценка: {testimonial.rating} из 5. «
+            {testimonial.quote}»
+          </li>
+        ))}
+      </ul>
+
+      <div className="mb-32 space-y-5 overflow-hidden" aria-hidden="true">
         {marqueeRows.map((row, index) => (
           <div key={`row-${index}`} data-testimonials-marquee className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-brand-dark to-transparent" />
@@ -157,6 +169,7 @@ export const Testimonials: React.FC = () => {
 
             <Marquee
               autoFill
+              play={!prefersReducedMotion}
               pauseOnHover
               gradient={false}
               speed={index === 0 ? 26 : 22}

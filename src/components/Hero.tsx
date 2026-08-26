@@ -14,6 +14,7 @@ export const Hero: React.FC = () => {
   useEffect(() => {
     const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
       const fadingElements = contentRef.current?.querySelectorAll("[data-hero-fade]") ?? [];
@@ -21,13 +22,13 @@ export const Hero: React.FC = () => {
       gsap.from(fadingElements, {
         y: isMobileViewport ? 28 : 100,
         opacity: 0,
-        duration: prefersReducedMotion ? 0.01 : isMobileViewport ? 1 : 2,
+        duration: isMobileViewport ? 1 : 2,
         stagger: isMobileViewport ? 0.12 : 0.2,
         ease: "power4.out",
         delay: isMobileViewport ? 0.35 : 0.8,
       });
 
-      if (isMobileViewport || prefersReducedMotion) return;
+      if (isMobileViewport) return;
 
       gsap.to(bgRef.current, {
         yPercent: 30,
@@ -65,15 +66,14 @@ export const Hero: React.FC = () => {
       {/* Background Image */}
       <div ref={bgRef} className="absolute inset-0 z-0 scale-110">
         <img
-          src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1920&auto=format&fit=crop"
-          alt="Luxury Interior Design"
+          src="/images/hero-interior.jpg"
+          alt="Интерьер квартиры с современной отделкой"
           className="w-full h-full object-cover"
           width={1920}
           height={1440}
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          referrerPolicy="no-referrer"
         />
 
         <div className="hero-overlay"></div>

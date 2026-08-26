@@ -4,7 +4,7 @@ import { MagneticButton } from "./MagneticButton";
 
 type PropertyType = "apartment" | "house" | "office";
 
-type FieldErrors = Partial<Record<"name" | "phone" | "propertyType" | "area", string>>;
+type FieldErrors = Partial<Record<"name" | "phone" | "propertyType" | "area" | "consent", string>>;
 
 const propertyTypes: { value: PropertyType; label: string }[] = [
   { value: "apartment", label: "Квартира" },
@@ -35,6 +35,7 @@ export const LeadForm: React.FC = () => {
   const [timeline, setTimeline] = useState(timelines[1]!);
   const [comment, setComment] = useState("");
   const [company, setCompany] = useState("");
+  const [personalDataConsent, setPersonalDataConsent] = useState(false);
 
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,6 +50,7 @@ export const LeadForm: React.FC = () => {
       next.phone = "Укажите телефон в формате +7 900 000-00-00.";
     if (!propertyType) next.propertyType = "Выберите тип объекта.";
     if (area && !/^\d{1,5}$/.test(area.trim())) next.area = "Площадь — только числом, в м².";
+    if (!personalDataConsent) next.consent = "Нужно подтвердить согласие.";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -75,6 +77,8 @@ export const LeadForm: React.FC = () => {
           timeline,
           comment,
           company,
+          personalDataConsent,
+          consentVersion: "2026-08-26",
         }),
       });
 
@@ -88,6 +92,7 @@ export const LeadForm: React.FC = () => {
       setBudget(budgets[4]!);
       setTimeline(timelines[1]!);
       setComment("");
+      setPersonalDataConsent(false);
       setSubmitSuccess(payload?.message || "Спасибо! Заявка принята.");
     } catch (failure) {
       setSubmitError(
@@ -127,6 +132,7 @@ export const LeadForm: React.FC = () => {
               onChange={(event) => setName(event.target.value)}
               onBlur={() => submitError || validate()}
               maxLength={80}
+              required
               autoComplete="name"
               aria-invalid={Boolean(errors.name)}
               className={fieldClass}
@@ -150,6 +156,7 @@ export const LeadForm: React.FC = () => {
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
               maxLength={24}
+              required
               autoComplete="tel"
               aria-invalid={Boolean(errors.phone)}
               className={`${fieldClass} num-tabular`}
@@ -164,9 +171,11 @@ export const LeadForm: React.FC = () => {
         </div>
 
         <div className="hidden" aria-hidden="true">
-          <label>
+          <label htmlFor="lead-company">
             Компания
             <input
+              id="lead-company"
+              name="company"
               type="text"
               tabIndex={-1}
               autoComplete="off"
@@ -280,7 +289,15 @@ export const LeadForm: React.FC = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
+        <div className="space-y-2 pt-2">
+          <label htmlFor="lead-personal-data-consent" className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-white/70">
+            <input id="lead-personal-data-consent" type="checkbox" required checked={personalDataConsent} onChange={(event) => { setPersonalDataConsent(event.target.checked); setErrors((current) => ({ ...current, consent: undefined })); }} aria-invalid={errors.consent ? true : undefined} aria-describedby="lead-personal-data-consent-help lead-personal-data-consent-error" className="mt-1 h-5 w-5 shrink-0 accent-brand-accent" />
+            <span>Даю отдельное согласие на обработку персональных данных.</span>
+          </label>
+          <p id="lead-personal-data-consent-help" className="text-xs leading-relaxed text-white/50">Текст согласия: <a className="underline underline-offset-4" href="/personal-data-consent/" target="_blank" rel="noreferrer">обработка персональных данных</a>. Подробнее: <a className="underline underline-offset-4" href="/privacy-policy/" target="_blank" rel="noreferrer">политика конфиденциальности</a>.</p>
+          <p id="lead-personal-data-consent-error" role="alert" className="text-xs text-red-200/80">{errors.consent || ""}</p>
+        </div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <MagneticButton className="w-full sm:w-auto">
             <button
               type="submit"
@@ -294,9 +311,6 @@ export const LeadForm: React.FC = () => {
             </button>
           </MagneticButton>
 
-          <p className="text-xs leading-relaxed opacity-40 sm:max-w-xs">
-            Нажимая кнопку, вы соглашаетесь на обработку персональных данных.
-          </p>
         </div>
 
         {submitSuccess ? (
