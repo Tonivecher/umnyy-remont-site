@@ -146,7 +146,7 @@ export const ReviewModerationPanel: React.FC<ReviewModerationPanelProps> = ({
   };
 
   return (
-    <div className="mb-16 border border-white/10 bg-white/4 p-8 md:p-10 rounded-[2rem] backdrop-blur-xl">
+    <div className="mb-16 rounded-[2rem] border border-white/10 bg-[#151515] p-8 md:p-10">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
         <div>
           <span className="text-[10px] uppercase tracking-[0.3em] opacity-40 block mb-3">

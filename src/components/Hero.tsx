@@ -1,14 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { telegramLinks } from "../utils/telegramLinks";
 import { MessengerLinks } from "./MessengerLinks";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export const Hero: React.FC = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,43 +23,15 @@ export const Hero: React.FC = () => {
         delay: isMobileViewport ? 0.35 : 0.8,
       });
 
-      if (isMobileViewport) return;
-
-      gsap.to(bgRef.current, {
-        yPercent: 30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.5,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      gsap.to(contentRef.current, {
-        yPercent: -20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.5,
-          invalidateOnRefresh: true,
-        },
-      });
     });
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      ref={heroRef}
-      className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden"
-    >
+    <section className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div ref={bgRef} className="absolute inset-0 z-0 scale-110">
+      <div className="absolute inset-0 z-0 scale-110">
         <img
           src="/images/hero-interior.jpg"
           alt="Интерьер квартиры с современной отделкой"

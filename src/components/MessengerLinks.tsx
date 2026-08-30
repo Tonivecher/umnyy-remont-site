@@ -84,7 +84,7 @@ export const MessengerLinks: React.FC<MessengerLinksProps> = ({
         "flex max-w-full gap-2.5",
         layout === "stack" ? "w-full flex-col" : "items-center justify-center",
         layout === "dock" &&
-          "rounded-full border border-white/15 bg-white/[0.06] p-2 shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_20px_50px_rgba(0,0,0,0.34)] backdrop-blur-2xl",
+          "rounded-full border border-white/15 bg-[#151515] p-2 shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_20px_50px_rgba(0,0,0,0.34)]",
         className,
       )}
       aria-label="Связаться в мессенджере"

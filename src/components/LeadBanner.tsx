@@ -89,7 +89,7 @@ export const LeadBanner: React.FC = () => {
 
   return (
     <section id="lead-banner" className="relative z-10 px-5 py-16 md:py-24">
-      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/5 p-7 backdrop-blur-xl md:p-12">
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-[#151515] p-7 md:p-12">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="mb-3 block text-[10px] uppercase tracking-[0.3em] opacity-60">

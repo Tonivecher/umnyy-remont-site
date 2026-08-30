@@ -1,10 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
 import { MagneticButton } from "./MagneticButton";
 import { LeadForm } from "./LeadForm";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type ProjectImage = {
   src: string;
@@ -160,52 +156,14 @@ const projects: Project[] = [
   },
 ];
 
-const thumbSrc = (src: string) => {
+const optimizedSrc = (src: string, width: 480 | 720) => {
   const index = src.lastIndexOf("/");
-  return `${src.slice(0, index)}/thumbs${src.slice(index)}`;
+  const extensionIndex = src.lastIndexOf(".");
+  const filename = src.slice(index + 1, extensionIndex);
+  return `${src.slice(0, index)}/optimized/${filename}-${width}.webp`;
 };
 
 export const Portfolio: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const ctx = gsap.context(() => {
-      // Single batched trigger instead of one ScrollTrigger per block.
-      ScrollTrigger.batch(".portfolio-item", {
-        start: "top 85%",
-        once: true,
-        onEnter: (batch) =>
-          gsap.from(batch, {
-            y: 80,
-            opacity: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            stagger: 0.08,
-            clearProps: "transform,opacity",
-          }),
-      });
-
-      // Smooth parallax for main images
-      const parallaxImages = gsap.utils.toArray<HTMLElement>(".image-parallax");
-      parallaxImages.forEach((img) => {
-        gsap.to(img, {
-          yPercent: 15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: img.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 0.5,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section id="portfolio" className="bg-brand-dark px-6 py-24 md:px-12 xl:px-24 md:py-40">
       <div className="mb-20 flex flex-col gap-10 md:mb-32 md:flex-row md:items-end md:justify-between">
@@ -239,7 +197,7 @@ export const Portfolio: React.FC = () => {
         </div>
       </div>
 
-      <div ref={containerRef} className="flex flex-col gap-32 md:gap-48 lg:gap-64 pb-20">
+      <div className="flex flex-col gap-32 md:gap-48 lg:gap-64 pb-20">
         {projects.map((project, index) => {
           const isEven = index % 2 === 0;
           const mainImg = project.gallery[0];
@@ -254,15 +212,19 @@ export const Portfolio: React.FC = () => {
                 <div className="w-full md:w-7/12 lg:w-2/3">
                   <div className="media-outline relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[1.75rem] bg-[#111]">
                     <img
-                      src={mainImg?.src}
+                      width={720}
+                      height={960}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full aspect-[3/4] object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                      src={mainImg ? optimizedSrc(mainImg.src, 720) : undefined}
                       srcSet={
-                        mainImg ? `${thumbSrc(mainImg.src)} 400w, ${mainImg.src} 960w` : undefined
+                        mainImg
+                          ? `${optimizedSrc(mainImg.src, 480)} 480w, ${optimizedSrc(mainImg.src, 720)} 720w`
+                          : undefined
                       }
                       sizes="(max-width: 767px) 92vw, (max-width: 1279px) 58vw, 50vw"
                       alt={mainImg?.alt}
-                      className="image-parallax absolute top-[-10%] left-0 w-full h-[120%] object-cover opacity-90 transition-opacity duration-700 group-hover:opacity-100"
-                      loading="lazy"
-                      decoding="async"
                     />
                   </div>
                 </div>
@@ -300,13 +262,15 @@ export const Portfolio: React.FC = () => {
                           className="media-outline relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[#111]"
                         >
                           <img
-                            src={thumbSrc(img.src)}
-                            srcSet={`${thumbSrc(img.src)} 400w, ${img.src} 960w`}
-                            sizes="(max-width: 767px) 44vw, 180px"
-                            alt={img.alt}
-                            className="w-full h-full object-cover opacity-60 transition-opacity duration-700 group-hover:opacity-90 hover:!opacity-100 grayscale-[20%] hover:grayscale-0"
+                            width={480}
+                            height={640}
                             loading="lazy"
                             decoding="async"
+                            className="h-full w-full aspect-[3/4] object-cover opacity-70 transition-opacity duration-300 group-hover:opacity-90 hover:!opacity-100"
+                            src={optimizedSrc(img.src, 480)}
+                            srcSet={`${optimizedSrc(img.src, 480)} 480w, ${optimizedSrc(img.src, 720)} 720w`}
+                            sizes="(max-width: 767px) 44vw, 180px"
+                            alt={img.alt}
                           />
                         </figure>
                       ))}

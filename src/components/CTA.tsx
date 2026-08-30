@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import React from "react";
 import { MessengerLinks } from "./MessengerLinks";
 import { messengerLinks } from "../utils/messengerLinks";
 
@@ -9,27 +8,8 @@ const contactLinks = {
 };
 
 export const CTA: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const ctx = gsap.context(() => {
-      gsap.from(".cta-content", {
-        y: 30,
-        opacity: 0,
-        duration: 1.5,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 85%",
-        },
-      });
-    });
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={containerRef}
       id="contact"
       className="overflow-hidden bg-brand-light px-6 py-28 text-brand-dark md:px-24 md:py-64"
     >

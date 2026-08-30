@@ -73,7 +73,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onReviewSubmitted }) => 
   };
 
   return (
-    <div className="bg-white/5 border border-white/10 p-8 md:p-12 rounded-[2rem] backdrop-blur-xl">
+    <div className="rounded-[2rem] border border-white/10 bg-[#151515] p-8 md:p-12">
       <h3 className="text-2xl font-display mb-4">Оставить отзыв</h3>
       <p className="text-sm opacity-55 leading-relaxed mb-8 max-w-2xl">
         Отзыв не публикуется сразу. Сначала он попадает в очередь на модерацию, и только после

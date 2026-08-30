@@ -43,7 +43,7 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.035] backdrop-blur-[1px]",
+        "relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#151515]",
         className,
       )}
     >

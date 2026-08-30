@@ -1,52 +1,13 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
 import { MagneticButton } from "./MagneticButton";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export const About: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
-
-    const ctx = gsap.context(() => {
-      gsap.from(textRef.current, {
-        x: isMobileViewport ? 0 : -50,
-        y: isMobileViewport ? 28 : 0,
-        opacity: 0,
-        duration: 1.5,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-      });
-
-      gsap.from(imageRef.current, {
-        scale: 1.1,
-        opacity: 0,
-        duration: 2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-      });
-    });
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="about"
       className="grid items-center gap-16 bg-brand-light px-6 py-28 text-brand-dark md:grid-cols-2 md:gap-32 md:px-24 md:py-64"
     >
-      <div ref={textRef} className="max-w-xl">
+      <div className="max-w-xl">
         <span className="text-[10px] uppercase tracking-[0.3em] mb-8 block opacity-60">
           Философия
         </span>
@@ -85,10 +46,7 @@ export const About: React.FC = () => {
         </div>
       </div>
 
-      <div
-        ref={imageRef}
-        className="media-outline-light aspect-[4/5] overflow-hidden rounded-[1.75rem]"
-      >
+      <div className="media-outline-light aspect-[4/5] overflow-hidden rounded-[1.75rem]">
         <img
           src="/images/about-architecture.jpg"
           alt="Светлый интерьер с архитектурной композицией"

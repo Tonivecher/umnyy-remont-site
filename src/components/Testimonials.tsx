@@ -1,18 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect, useMemo, useState } from "react";
 import { Star } from "lucide-react";
-import { useReducedMotion } from "framer-motion";
-import MarqueeImport from "react-fast-marquee";
-
-// react-fast-marquee ships CJS; normalize the interop default in the Vite/SSR runtime.
-const Marquee = ((MarqueeImport as unknown as { default?: typeof MarqueeImport }).default ??
-  MarqueeImport) as typeof MarqueeImport;
 import { ReviewForm } from "./ReviewForm";
 import { ReviewModerationPanel } from "./ReviewModerationPanel";
 import { formatReviewDate, isReviewsAdminMode, PublicReview } from "@/utils/reviews";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type DisplayTestimonial = {
   id: string;
@@ -42,7 +32,7 @@ const staticTestimonials: DisplayTestimonial[] = [
 ];
 
 const TestimonialCard: React.FC<{ testimonial: DisplayTestimonial }> = ({ testimonial }) => (
-  <article className="testimonial-card mx-4 flex h-full w-[min(30rem,calc(100vw-4.5rem))] flex-col justify-between rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-8 md:mx-5 md:w-[34rem] md:p-10 backdrop-blur-xl shadow-[0_24px_80px_rgba(0,0,0,0.24)]">
+  <article className="testimonial-card flex h-full flex-col justify-between rounded-[1.75rem] border border-white/10 bg-[#151515] p-8 shadow-[0_24px_80px_rgba(0,0,0,0.18)] md:p-10">
     <div>
       <div className="mb-6 flex gap-1">
         {[...Array(5)].map((_, index) => (
@@ -70,8 +60,6 @@ const TestimonialCard: React.FC<{ testimonial: DisplayTestimonial }> = ({ testim
 );
 
 export const Testimonials: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const prefersReducedMotion = useReducedMotion();
   const [approvedReviews, setApprovedReviews] = useState<PublicReview[]>([]);
   const [adminMode, setAdminMode] = useState(false);
 
@@ -108,38 +96,8 @@ export const Testimonials: React.FC = () => {
     [approvedReviews],
   );
 
-  const marqueeRows = useMemo(() => {
-    const primary = testimonials.filter((_, index) => index % 2 === 0);
-    const secondary = testimonials.filter((_, index) => index % 2 !== 0);
-
-    return [primary.length ? primary : testimonials, secondary.length ? secondary : testimonials];
-  }, [testimonials]);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const ctx = gsap.context(() => {
-      const rows = gsap.utils.toArray<HTMLElement>("[data-testimonials-marquee]");
-      if (!rows.length) return;
-
-      gsap.from(rows, {
-        y: 40,
-        opacity: 0,
-        duration: 1.2,
-        stagger: 0.14,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [approvedReviews.length, prefersReducedMotion]);
-
   return (
     <section
-      ref={sectionRef}
       id="testimonials"
       className="py-32 md:py-64 px-8 md:px-24 bg-brand-dark"
     >
@@ -152,34 +110,9 @@ export const Testimonials: React.FC = () => {
 
       {adminMode ? <ReviewModerationPanel onReviewsUpdated={loadReviews} /> : null}
 
-      <ul className="sr-only">
+      <div className="mb-32 grid gap-5 lg:grid-cols-2">
         {testimonials.map((testimonial) => (
-          <li key={`accessible-${testimonial.id}`}>
-            {testimonial.author}, {testimonial.meta}. Оценка: {testimonial.rating} из 5. «
-            {testimonial.quote}»
-          </li>
-        ))}
-      </ul>
-
-      <div className="mb-32 space-y-5 overflow-hidden" aria-hidden="true">
-        {marqueeRows.map((row, index) => (
-          <div key={`row-${index}`} data-testimonials-marquee className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-brand-dark to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-brand-dark to-transparent" />
-
-            <Marquee
-              autoFill
-              play={!prefersReducedMotion}
-              pauseOnHover
-              gradient={false}
-              speed={index === 0 ? 26 : 22}
-              direction={index === 0 ? "left" : "right"}
-            >
-              {row.map((testimonial) => (
-                <TestimonialCard key={`${index}-${testimonial.id}`} testimonial={testimonial} />
-              ))}
-            </Marquee>
-          </div>
+          <TestimonialCard key={testimonial.id} testimonial={testimonial} />
         ))}
       </div>
 

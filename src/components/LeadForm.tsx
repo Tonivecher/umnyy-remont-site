@@ -108,7 +108,7 @@ export const LeadForm: React.FC = () => {
   return (
     <div
       id="lead-form"
-      className="mt-24 rounded-[2rem] border border-white/10 bg-white/5 p-7 backdrop-blur-xl md:mt-32 md:p-12"
+      className="mt-24 rounded-[2rem] border border-white/10 bg-[#151515] p-7 md:mt-32 md:p-12"
     >
       <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] opacity-60">
         Заявка на расчёт
